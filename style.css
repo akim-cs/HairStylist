@@ -22,18 +22,19 @@ body {
     text-align: center;
     margin-bottom: 40px;
     padding: 40px 0;
-    background: rgba(255, 255, 255, 0.8);
+    background: #daddc6; /* Sage green background */
     border-radius: 15px;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(4px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
 }
 
 .header h1 {
     font-size: 3rem;
-    color: #daddc6;
+    color: #ffffff; /* White text */
     margin-bottom: 10px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
 }
+
 
 .bio {
     max-width: 600px;
