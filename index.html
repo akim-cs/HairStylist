@@ -4,7 +4,341 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Hair Salon</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: #f1ead8;
+            color: #5a5a5a;
+            line-height: 1.7;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Header Section */
+        .header {
+            background: #daddc6;
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            color: #4a4a4a;
+            margin-bottom: 20px;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+
+        .bio {
+            max-width: 500px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+            color: #4a4a4a;
+            font-style: italic;
+        }
+
+        /* Section Dividers */
+        .section-divider {
+            display: none;
+        }
+
+        /* Portfolio Section */
+        .portfolio {
+            background: #f1ead8;
+            padding: 80px 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.2rem;
+            color: #4a4a4a;
+            margin-bottom: 50px;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+            margin-top: 50px;
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .portfolio-item {
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .portfolio-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .portfolio-image {
+            width: 100%;
+            height: 220px;
+            background: linear-gradient(135deg, #daddc6 0%, #ecd3bd 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #f1ead8;
+            font-size: 1rem;
+            margin-bottom: 20px;
+            border-radius: 2px;
+        }
+
+        .portfolio-content h4 {
+            color: #4a4a4a;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            font-weight: 400;
+        }
+
+        .portfolio-content p {
+            color: #4a4a4a;
+            font-size: 0.95rem;
+        }
+
+        /* Calendar Section */
+        .calendar-section {
+            background: #daddc6;
+            padding: 100px 20px;
+        }
+
+        .calendar-section .section-title {
+            color: #2c2c2c;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .calendar-nav {
+            background: transparent;
+            color: #2c2c2c;
+            border: 1px solid #2c2c2c;
+            padding: 8px 16px;
+            border-radius: 0;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-family: 'Georgia', serif;
+            transition: all 0.3s ease;
+        }
+
+        .calendar-nav:hover {
+            background: #ecd3bd;
+            color: #f1ead8;
+            border-color: #ecd3bd;
+        }
+
+        .calendar-month {
+            font-size: 1.8rem;
+            color: #2c2c2c;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            margin-bottom: 40px;
+            background: #c5c8b8;
+            border: 1px solid #c5c8b8;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .calendar-day-header {
+            text-align: center;
+            font-weight: 400;
+            color: #4a4a4a;
+            padding: 15px 5px;
+            background: #f1ead8;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f1ead8;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #ecd3bd;
+            font-weight: 500;
+        }
+
+        .calendar-day:hover {
+            background: #ecd3bd;
+            color: #f1ead8;
+        }
+
+        .calendar-day.selected {
+            background: #ecd3bd;
+            color: #f1ead8;
+        }
+
+        .calendar-day.other-month {
+            color: #c0c0c0;
+            background: #f8f8f8;
+        }
+
+        .booking-info {
+            text-align: center;
+            margin-top: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .booking-info h3 {
+            color: #4a4a4a;
+            font-size: 1.3rem;
+            font-weight: 300;
+            margin-bottom: 30px;
+        }
+
+        .booking-info p {
+            color: #4a4a4a;
+        }
+
+        .time-slots {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin: 30px 0;
+        }
+
+        .time-slot {
+            background: #f1ead8;
+            border: 1px solid #4a4a4a;
+            color: #4a4a4a;
+            padding: 10px 20px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+            font-family: 'Georgia', serif;
+            font-size: 0.9rem;
+        }
+
+        .time-slot:hover {
+            background: #ecd3bd;
+            color: #f1ead8;
+            border-color: #ecd3bd;
+        }
+
+        .time-slot.booked {
+            background: #f0f0f0;
+            color: #c0c0c0;
+            border-color: #e0e0e0;
+            cursor: not-allowed;
+        }
+
+        .book-btn {
+            background: #ecd3bd;
+            color: #f1ead8;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 20px;
+            font-family: 'Georgia', serif;
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+        }
+
+        .book-btn:hover {
+            background: #daddc6;
+        }
+
+        /* Footer */
+        .footer {
+            background: #f1ead8;
+            text-align: center;
+            padding: 60px 20px;
+            border-top: 1px solid #e8e8e8;
+        }
+
+        .instagram-link {
+            display: inline-block;
+            color: #4a4a4a;
+            text-decoration: none;
+            font-size: 1rem;
+            padding: 12px 0;
+            border-bottom: 1px solid transparent;
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+        }
+
+        .instagram-link:hover {
+            border-bottom-color: #ecd3bd;
+            color: #ecd3bd;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 60px 20px;
+            }
+            
+            .header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .portfolio {
+                padding: 60px 20px;
+            }
+            
+            .portfolio-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .calendar-section {
+                padding: 80px 20px;
+            }
+            
+            .calendar-header {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .time-slots {
+                gap: 8px;
+            }
+            
+            .time-slot {
+                padding: 8px 16px;
+                font-size: 0.85rem;
+            }
+            
+            .footer {
+                padding: 40px 20px;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -12,10 +346,11 @@
         <header class="header">
             <h1 id="stylist-name">Your Name Here</h1>
             <div class="bio">
-                <h3>About Me</h3>
                 <p id="bio-text">Add your bio here - tell clients about your experience, specialties, and passion for hair styling...</p>
             </div>
         </header>
+
+        <div class="section-divider"></div>
 
         <!-- Portfolio Section -->
         <section class="portfolio">
@@ -59,6 +394,8 @@
             </div>
         </section>
 
+        <div class="section-divider"></div>
+
         <!-- Calendar Section -->
         <section class="calendar-section">
             <h2 class="section-title">Book an Appointment</h2>
@@ -84,10 +421,12 @@
             </div>
         </section>
 
+        <div class="section-divider"></div>
+
         <!-- Footer -->
         <footer class="footer">
             <a href="#" class="instagram-link" id="instagram-link">
-                📷 Follow me on Instagram
+                Follow me on Instagram
             </a>
         </footer>
     </div>
