@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Hair Salon</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1 id="stylist-name">Your Name Here</h1>
+            <div class="bio">
+                <h3>About Me</h3>
+                <p id="bio-text">Add your bio here - tell clients about your experience, specialties, and passion for hair styling...</p>
+            </div>
+        </header>
+
+        <!-- Portfolio Section -->
+        <section class="portfolio">
+            <h2 class="section-title">My Work</h2>
+            <div class="portfolio-grid">
+                <div class="portfolio-item">
+                    <div class="portfolio-image">Haircut Showcase 1</div>
+                    <div class="portfolio-content">
+                        <h4>Style Name</h4>
+                        <p>Description of the haircut and styling technique used.</p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <div class="portfolio-image">Haircut Showcase 2</div>
+                    <div class="portfolio-content">
+                        <h4>Style Name</h4>
+                        <p>Description of the haircut and styling technique used.</p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <div class="portfolio-image">Haircut Showcase 3</div>
+                    <div class="portfolio-content">
+                        <h4>Style Name</h4>
+                        <p>Description of the haircut and styling technique used.</p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <div class="portfolio-image">Haircut Showcase 4</div>
+                    <div class="portfolio-content">
+                        <h4>Style Name</h4>
+                        <p>Description of the haircut and styling technique used.</p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <div class="portfolio-image">Haircut Showcase 5</div>
+                    <div class="portfolio-content">
+                        <h4>Style Name</h4>
+                        <p>Description of the haircut and styling technique used.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Calendar Section -->
+        <section class="calendar-section">
+            <h2 class="section-title">Book an Appointment</h2>
+            
+            <div class="calendar-header">
+                <button class="calendar-nav" onclick="changeMonth(-1)">← Previous</button>
+                <div class="calendar-month" id="current-month"></div>
+                <button class="calendar-nav" onclick="changeMonth(1)">Next →</button>
+            </div>
+
+            <div class="calendar-grid" id="calendar-grid">
+                <div class="calendar-day-header">Sun</div>
+                <div class="calendar-day-header">Mon</div>
+                <div class="calendar-day-header">Tue</div>
+                <div class="calendar-day-header">Wed</div>
+                <div class="calendar-day-header">Thu</div>
+                <div class="calendar-day-header">Fri</div>
+                <div class="calendar-day-header">Sat</div>
+            </div>
+
+            <div class="booking-info" id="booking-info">
+                <p>Select a date to view available time slots</p>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <a href="#" class="instagram-link" id="instagram-link">
+                📷 Follow me on Instagram
+            </a>
+        </footer>
+    </div>
+
+    <script>
+        // Calendar functionality
+        let currentDate = new Date();
+        let selectedDate = null;
+        let bookedSlots = {}; // Store booked appointments
+
+        const timeSlots = [
+            '10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM', 
+            '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM', '6:00 PM'
+        ];
+
+        function renderCalendar() {
+            const monthNames = [
+                'January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'
+            ];
+
+            const currentMonth = currentDate.getMonth();
+            const currentYear = currentDate.getFullYear();
+            
+            document.getElementById('current-month').textContent = 
+                `${monthNames[currentMonth]} ${currentYear}`;
+
+            const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            const daysInPrevMonth = new Date(currentYear, currentMonth, 0).getDate();
+
+            const calendarGrid = document.getElementById('calendar-grid');
+            
+            // Clear existing days (keep headers)
+            const dayHeaders = calendarGrid.querySelectorAll('.calendar-day-header');
+            calendarGrid.innerHTML = '';
+            dayHeaders.forEach(header => calendarGrid.appendChild(header));
+
+            // Add previous month's trailing days
+            for (let i = firstDay - 1; i >= 0; i--) {
+                const dayElement = createDayElement(daysInPrevMonth - i, true);
+                calendarGrid.appendChild(dayElement);
+            }
+
+            // Add current month's days
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayElement = createDayElement(day, false);
+                calendarGrid.appendChild(dayElement);
+            }
+
+            // Add next month's leading days
+            const totalCells = calendarGrid.children.length - 7; // Subtract headers
+            const remainingCells = 42 - totalCells; // 6 rows × 7 days
+            for (let day = 1; day <= remainingCells; day++) {
+                const dayElement = createDayElement(day, true);
+                calendarGrid.appendChild(dayElement);
+            }
+        }
+
+        function createDayElement(day, isOtherMonth) {
+            const dayElement = document.createElement('div');
+            dayElement.className = `calendar-day ${isOtherMonth ? 'other-month' : ''}`;
+            dayElement.textContent = day;
+            
+            if (!isOtherMonth) {
+                dayElement.addEventListener('click', () => selectDate(day));
+            }
+            
+            return dayElement;
+        }
+
+        function selectDate(day) {
+            // Remove previous selection
+            document.querySelectorAll('.calendar-day.selected').forEach(el => {
+                el.classList.remove('selected');
+            });
+
+            // Add selection to clicked day
+            event.target.classList.add('selected');
+            
+            selectedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
+            showTimeSlots();
+        }
+
+        function showTimeSlots() {
+            const bookingInfo = document.getElementById('booking-info');
+            const dateKey = selectedDate.toDateString();
+            
+            bookingInfo.innerHTML = `
+                <h3>Available Times for ${selectedDate.toLocaleDateString()}</h3>
+                <div class="time-slots" id="time-slots-container"></div>
+            `;
+
+            const slotsContainer = document.getElementById('time-slots-container');
+            
+            timeSlots.forEach(time => {
+                const slotKey = `${dateKey}-${time}`;
+                const isBooked = bookedSlots[slotKey];
+                
+                const slotElement = document.createElement('div');
+                slotElement.className = `time-slot ${isBooked ? 'booked' : ''}`;
+                slotElement.textContent = time;
+                
+                if (!isBooked) {
+                    slotElement.addEventListener('click', () => bookSlot(slotKey, time));
+                }
+                
+                slotsContainer.appendChild(slotElement);
+            });
+        }
+
+        function bookSlot(slotKey, time) {
+            const confirmed = confirm(`Book appointment for ${selectedDate.toLocaleDateString()} at ${time}?`);
+            
+            if (confirmed) {
+                bookedSlots[slotKey] = true;
+                showTimeSlots(); // Refresh the time slots display
+                alert('Appointment booked successfully!');
+            }
+        }
+
+        function changeMonth(direction) {
+            currentDate.setMonth(currentDate.getMonth() + direction);
+            selectedDate = null;
+            renderCalendar();
+            
+            // Reset booking info
+            document.getElementById('booking-info').innerHTML = 
+                '<p>Select a date to view available time slots</p>';
+        }
+
+        // Initialize calendar
+        renderCalendar();
+
+        // Auto-update calendar when month changes
+        setInterval(() => {
+            const now = new Date();
+            if (now.getMonth() !== currentDate.getMonth() || now.getFullYear() !== currentDate.getFullYear()) {
+                currentDate = new Date(now.getFullYear(), now.getMonth(), 1);
+                renderCalendar();
+            }
+        }, 24 * 60 * 60 * 1000); // Check daily
+    </script>
+</body>
+</html>
