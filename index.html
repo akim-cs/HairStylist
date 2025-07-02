@@ -26,89 +26,114 @@
             padding: 0;
         }
 
-        /* Header Section */
+        /* Header Section - Horizontal Layers */
         .header {
             background: #daddc6;
+            padding: 60px 20px;
+        }
+
+        .header-layer {
+            width: 100%;
             text-align: center;
-            padding: 80px 20px;
+            margin-bottom: 40px;
         }
 
-        .header h1 {
-            font-size: 3.5rem;
+        .header-layer:last-child {
+            margin-bottom: 0;
+        }
+
+        .name-layer h1 {
+            font-size: 4rem;
             color: #4a4a4a;
-            margin-bottom: 20px;
             font-weight: 300;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
+            margin: 0;
+            border-bottom: 2px solid #ff8c42;
+            padding-bottom: 15px;
+            display: inline-block;
         }
 
-        .bio {
-            max-width: 500px;
+        .bio-layer {
+            max-width: 600px;
             margin: 0 auto;
-            font-size: 1.1rem;
+        }
+
+        .bio-layer p {
+            font-size: 1.2rem;
             color: #4a4a4a;
             font-style: italic;
+            margin: 0;
         }
 
-        /* Section Dividers */
-        .section-divider {
-            display: none;
+        .work-layer h2 {
+            font-size: 2.5rem;
+            color: #4a4a4a;
+            font-weight: 300;
+            letter-spacing: 2px;
+            margin: 0;
         }
 
-        /* Portfolio Section */
+        /* Portfolio Section - Horizontal Layout */
         .portfolio {
             background: #f1ead8;
             padding: 80px 20px;
+            overflow-x: auto;
         }
 
-        .section-title {
-            text-align: center;
-            font-size: 2.2rem;
-            color: #4a4a4a;
-            margin-bottom: 50px;
-            font-weight: 300;
-            letter-spacing: 1px;
+        .portfolio-container {
+            max-width: 1400px;
+            margin: 0 auto;
         }
 
         .portfolio-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 40px;
-            margin-top: 50px;
-            max-width: 1000px;
-            margin-left: auto;
-            margin-right: auto;
+            display: flex;
+            gap: 60px;
+            justify-content: center;
+            align-items: center;
+            min-width: max-content;
+            padding: 20px 0;
         }
 
         .portfolio-item {
             text-align: center;
             transition: transform 0.3s ease;
+            flex-shrink: 0;
         }
 
         .portfolio-item:hover {
-            transform: translateY(-5px);
+            transform: translateY(-10px);
         }
 
         .portfolio-image {
-            width: 100%;
-            height: 220px;
+            width: 220px;
+            height: 280px;
             background: linear-gradient(135deg, #daddc6 0%, #ecd3bd 100%);
             display: flex;
             align-items: center;
             justify-content: center;
             color: #f1ead8;
             font-size: 1rem;
-            margin-bottom: 20px;
-            border-radius: 2px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
         /* Calendar Section */
         .calendar-section {
             background: #daddc6;
             padding: 100px 20px;
+            text-align: center;
         }
 
         .calendar-section .section-title {
             color: #2c2c2c;
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 50px;
+            font-weight: 300;
+            letter-spacing: 1px;
+            border-bottom: 2px solid #ff8c42;
+            padding-bottom: 15px;
+            display: inline-block;
         }
 
         .calendar-header {
@@ -174,7 +199,7 @@
             background: #f1ead8;
             cursor: pointer;
             transition: all 0.2s ease;
-            color: #ecd3bd;
+            color: #4a4a4a;
             font-weight: 500;
         }
 
@@ -245,24 +270,7 @@
             cursor: not-allowed;
         }
 
-        .book-btn {
-            background: #ecd3bd;
-            color: #f1ead8;
-            border: none;
-            padding: 12px 30px;
-            font-size: 1rem;
-            cursor: pointer;
-            margin-top: 20px;
-            font-family: 'Georgia', serif;
-            transition: all 0.3s ease;
-            letter-spacing: 0.5px;
-        }
-
-        .book-btn:hover {
-            background: #daddc6;
-        }
-
-        /* Footer */
+        /* Footer with Instagram Logo */
         .footer {
             background: #f1ead8;
             text-align: center;
@@ -272,36 +280,58 @@
 
         .instagram-link {
             display: inline-block;
-            color: #4a4a4a;
-            text-decoration: none;
-            font-size: 1rem;
-            padding: 12px 0;
-            border-bottom: 1px solid transparent;
             transition: all 0.3s ease;
-            letter-spacing: 0.5px;
+            opacity: 0.8;
         }
 
         .instagram-link:hover {
-            border-bottom-color: #ecd3bd;
-            color: #ecd3bd;
+            opacity: 1;
+            transform: scale(1.1);
         }
 
+        .instagram-logo {
+            width: 40px;
+            height: 40px;
+            fill: #4a4a4a;
+            transition: fill 0.3s ease;
+        }
+
+        .instagram-link:hover .instagram-logo {
+            fill: #e4405f;
+        }
+
+        /* Mobile Responsiveness */
         @media (max-width: 768px) {
             .header {
-                padding: 60px 20px;
+                padding: 40px 20px;
             }
             
-            .header h1 {
-                font-size: 2.5rem;
+            .name-layer h1 {
+                font-size: 2.8rem;
+                letter-spacing: 2px;
+            }
+
+            .bio-layer p {
+                font-size: 1.1rem;
+            }
+
+            .work-layer h2 {
+                font-size: 2rem;
             }
             
             .portfolio {
-                padding: 60px 20px;
+                padding: 60px 10px;
             }
             
             .portfolio-grid {
-                grid-template-columns: 1fr;
                 gap: 30px;
+                padding: 20px;
+                justify-content: flex-start;
+            }
+
+            .portfolio-image {
+                width: 180px;
+                height: 220px;
             }
             
             .calendar-section {
@@ -326,40 +356,58 @@
                 padding: 40px 20px;
             }
         }
+
+        @media (max-width: 480px) {
+            .header-layer {
+                margin-bottom: 30px;
+            }
+
+            .portfolio-grid {
+                gap: 20px;
+            }
+
+            .portfolio-image {
+                width: 160px;
+                height: 200px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
+        <!-- Header with Horizontal Layers -->
         <header class="header">
-            <h1 id="stylist-name">ANDY KIM</h1>
-            <div class="bio">
-                <p id="bio-text">I’m a self-taught hairstylist with over five years of experience. I specialize in personalized cuts and styles and would love to help you look your best.</p>
-        <div class="section-divider"></div>
+            <div class="header-layer name-layer">
+                <h1 id="stylist-name">ANDY KIM</h1>
+            </div>
+            
+            <div class="header-layer bio-layer">
+                <p id="bio-text">I'm a self-taught hairstylist with over five years of experience. I specialize in personalized cuts and modern styles.</p>
+            </div>
+        </header>
 
-        <!-- Portfolio Section -->
+        <!-- Portfolio Section - Horizontal Layout -->
         <section class="portfolio">
-            <h2 class="section-title">My Work</h2>
-            <div class="portfolio-grid">
-                <div class="portfolio-item">
-                    <div class="portfolio-image">Haircut Showcase 1</div>
-                </div>
-                <div class="portfolio-item">
-                    <div class="portfolio-image">Haircut Showcase 2</div>
-                </div>
-                <div class="portfolio-item">
-                    <div class="portfolio-image">Haircut Showcase 3</div>
-                </div>
-                <div class="portfolio-item">
-                    <div class="portfolio-image">Haircut Showcase 4</div>
-                </div>
-                <div class="portfolio-item">
-                    <div class="portfolio-image">Haircut Showcase 5</div>
+            <div class="portfolio-container">
+                <div class="portfolio-grid">
+                    <div class="portfolio-item">
+                        <div class="portfolio-image">Haircut Showcase 1</div>
+                    </div>
+                    <div class="portfolio-item">
+                        <div class="portfolio-image">Haircut Showcase 2</div>
+                    </div>
+                    <div class="portfolio-item">
+                        <div class="portfolio-image">Haircut Showcase 3</div>
+                    </div>
+                    <div class="portfolio-item">
+                        <div class="portfolio-image">Haircut Showcase 4</div>
+                    </div>
+                    <div class="portfolio-item">
+                        <div class="portfolio-image">Haircut Showcase 5</div>
+                    </div>
                 </div>
             </div>
         </section>
-
-        <div class="section-divider"></div>
 
         <!-- Calendar Section -->
         <section class="calendar-section">
@@ -386,12 +434,12 @@
             </div>
         </section>
 
-        <div class="section-divider"></div>
-
-        <!-- Footer -->
+        <!-- Footer with Instagram Logo -->
         <footer class="footer">
             <a href="#" class="instagram-link" id="instagram-link">
-                Follow me on Instagram
+                <svg class="instagram-logo" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                </svg>
             </a>
         </footer>
     </div>
