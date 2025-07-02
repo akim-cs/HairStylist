@@ -41,7 +41,7 @@ body {
     padding: 20px;
     background: rgba(245, 247, 244, 0.7);
     border-radius: 10px;
-    border-left: 4px solid #ff6b35;
+    border-left: 4px solid #ecd3bd;
 }
 
 .bio h3 {
@@ -62,7 +62,7 @@ body {
 .section-title {
     text-align: center;
     font-size: 2.5rem;
-    color: #7d8471;
+    color: #daddc6;
     margin-bottom: 30px;
     position: relative;
 }
@@ -75,7 +75,7 @@ body {
     transform: translateX(-50%);
     width: 100px;
     height: 3px;
-    background: #ff6b35;
+    background: #ecd3bd;
     border-radius: 2px;
 }
 
@@ -102,7 +102,7 @@ body {
 .portfolio-image {
     width: 100%;
     height: 250px;
-    background: linear-gradient(45deg, #7d8471, #a8b5a0);
+    background: linear-gradient(45deg, #daddc6, #f1ead8);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -115,7 +115,7 @@ body {
 }
 
 .portfolio-content h4 {
-    color: #7d8471;
+    color: #daddc6;
     margin-bottom: 10px;
 }
 
@@ -140,8 +140,8 @@ body {
 }
 
 .calendar-nav {
-    background: #ff6b35;
-    color: white;
+    background: #ecd3bd;
+    color: #2d3436;
     border: none;
     padding: 12px 20px;
     border-radius: 25px;
@@ -151,14 +151,14 @@ body {
 }
 
 .calendar-nav:hover {
-    background: #e55a2b;
+    background: #e0bda5;
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
+    box-shadow: 0 5px 15px rgba(236, 211, 189, 0.4);
 }
 
 .calendar-month {
     font-size: 2rem;
-    color: #7d8471;
+    color: #daddc6;
     font-weight: bold;
 }
 
@@ -172,9 +172,9 @@ body {
 .calendar-day-header {
     text-align: center;
     font-weight: bold;
-    color: #7d8471;
+    color: #daddc6;
     padding: 10px;
-    background: rgba(125, 132, 113, 0.1);
+    background: rgba(218, 221, 198, 0.1);
     border-radius: 5px;
 }
 
@@ -191,14 +191,14 @@ body {
 }
 
 .calendar-day:hover {
-    background: rgba(125, 132, 113, 0.2);
+    background: rgba(218, 221, 198, 0.2);
     transform: scale(1.05);
 }
 
 .calendar-day.selected {
-    background: #ff6b35;
-    color: white;
-    border-color: #e55a2b;
+    background: #ecd3bd;
+    color: #2d3436;
+    border-color: #e0bda5;
 }
 
 .calendar-day.other-month {
@@ -215,8 +215,8 @@ body {
 
 .time-slot {
     background: rgba(245, 247, 244, 0.8);
-    border: 2px solid #7d8471;
-    color: #7d8471;
+    border: 2px solid #daddc6;
+    color: #2d3436;
     padding: 12px 20px;
     border-radius: 25px;
     cursor: pointer;
@@ -226,11 +226,11 @@ body {
 }
 
 .time-slot:hover {
-    background: #ff6b35;
-    color: white;
-    border-color: #e55a2b;
+    background: #ecd3bd;
+    color: #2d3436;
+    border-color: #e0bda5;
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
+    box-shadow: 0 5px 15px rgba(236, 211, 189, 0.4);
 }
 
 .time-slot.booked {
@@ -243,14 +243,14 @@ body {
 .booking-info {
     margin-top: 20px;
     padding: 20px;
-    background: rgba(125, 132, 113, 0.1);
+    background: rgba(218, 221, 198, 0.1);
     border-radius: 10px;
     text-align: center;
 }
 
 .book-btn {
-    background: #ff6b35;
-    color: white;
+    background: #ecd3bd;
+    color: #2d3436;
     border: none;
     padding: 15px 30px;
     border-radius: 25px;
@@ -261,9 +261,9 @@ body {
 }
 
 .book-btn:hover {
-    background: #e55a2b;
+    background: #e0bda5;
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(255, 107, 53, 0.3);
+    box-shadow: 0 8px 20px rgba(236, 211, 189, 0.4);
 }
 
 /* Footer */
@@ -271,7 +271,7 @@ body {
     text-align: center;
     margin-top: 60px;
     padding: 40px 0;
-    background: rgba(125, 132, 113, 0.1);
+    background: rgba(218, 221, 198, 0.1);
     border-radius: 15px;
 }
 
@@ -279,20 +279,20 @@ body {
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    color: #7d8471;
+    color: #daddc6;
     text-decoration: none;
     font-size: 1.2rem;
     padding: 15px 30px;
-    border: 2px solid #ff6b35;
+    border: 2px solid #ecd3bd;
     border-radius: 25px;
     transition: all 0.3s ease;
 }
 
 .instagram-link:hover {
-    background: #ff6b35;
-    color: white;
+    background: #ecd3bd;
+    color: #2d3436;
     transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(255, 107, 53, 0.3);
+    box-shadow: 0 8px 20px rgba(236, 211, 189, 0.4);
 }
 
 @media (max-width: 768px) {
@@ -313,3 +313,4 @@ body {
         grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
     }
 }
+
