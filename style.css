@@ -6,7 +6,7 @@
 
 body {
     font-family: 'Arial', sans-serif;
-    background: linear-gradient(135deg, #f5f7f4 0%, #faf9f7 100%);
+    background: linear-gradient(135deg, #f1ead8 0%, #f1ead8 100%);
     color: #2d3436;
     line-height: 1.6;
 }
@@ -30,7 +30,7 @@ body {
 
 .header h1 {
     font-size: 3rem;
-    color: #7d8471;
+    color: #daddc6;
     margin-bottom: 10px;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -45,7 +45,7 @@ body {
 }
 
 .bio h3 {
-    color: #7d8471;
+    color: #daddc6;
     margin-bottom: 10px;
 }
 
