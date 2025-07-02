@@ -467,144 +467,194 @@
         </footer>
     </div>
 
-    <script>
-        // Calendar functionality
-        let currentDate = new Date();
-        let selectedDate = null;
-        let bookedSlots = {}; // Store booked appointments
-
-        const timeSlots = [
-            '10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM', 
-            '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM', '6:00 PM'
+    <!-- Place this before the closing </body> tag -->
+    <script type="module">
+      // FIREBASE INTEGRATION
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+      import {
+        getFirestore,
+        collection,
+        addDoc,
+        getDocs,
+        query,
+        where,
+        serverTimestamp
+      } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+    
+      const firebaseConfig = {
+        apiKey: "AIzaSyCDBcHgEOYMS_Fwq2qXWBhP_uADt8N4szg",
+        authDomain: "hairstylist-f7b96.firebaseapp.com",
+        projectId: "hairstylist-f7b96",
+        storageBucket: "hairstylist-f7b96.firebasestorage.app",
+        messagingSenderId: "406149207191",
+        appId: "1:406149207191:web:61d1b7308a9b58f49305d2",
+        measurementId: "G-CVQZWFY5YY"
+      };
+    
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+    
+      // Calendar & Booking Logic
+      let currentDate = new Date();
+      let selectedDate = null;
+      let bookedSlots = {}; // Cache of booked slots
+    
+      const timeSlots = [
+        '10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM',
+        '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM', '6:00 PM'
+      ];
+    
+      function renderCalendar() {
+        const monthNames = [
+          'January', 'February', 'March', 'April', 'May', 'June',
+          'July', 'August', 'September', 'October', 'November', 'December'
         ];
-
-        function renderCalendar() {
-            const monthNames = [
-                'January', 'February', 'March', 'April', 'May', 'June',
-                'July', 'August', 'September', 'October', 'November', 'December'
-            ];
-
-            const currentMonth = currentDate.getMonth();
-            const currentYear = currentDate.getFullYear();
-            
-            document.getElementById('current-month').textContent = 
-                `${monthNames[currentMonth]} ${currentYear}`;
-
-            const firstDay = new Date(currentYear, currentMonth, 1).getDay();
-            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-            const daysInPrevMonth = new Date(currentYear, currentMonth, 0).getDate();
-
-            const calendarGrid = document.getElementById('calendar-grid');
-            
-            // Clear existing days (keep headers)
-            const dayHeaders = calendarGrid.querySelectorAll('.calendar-day-header');
-            calendarGrid.innerHTML = '';
-            dayHeaders.forEach(header => calendarGrid.appendChild(header));
-
-            // Add previous month's trailing days
-            for (let i = firstDay - 1; i >= 0; i--) {
-                const dayElement = createDayElement(daysInPrevMonth - i, true);
-                calendarGrid.appendChild(dayElement);
-            }
-
-            // Add current month's days
-            for (let day = 1; day <= daysInMonth; day++) {
-                const dayElement = createDayElement(day, false);
-                calendarGrid.appendChild(dayElement);
-            }
-
-            // Add next month's leading days
-            const totalCells = calendarGrid.children.length - 7; // Subtract headers
-            const remainingCells = 42 - totalCells; // 6 rows × 7 days
-            for (let day = 1; day <= remainingCells; day++) {
-                const dayElement = createDayElement(day, true);
-                calendarGrid.appendChild(dayElement);
-            }
+    
+        const currentMonth = currentDate.getMonth();
+        const currentYear = currentDate.getFullYear();
+    
+        document.getElementById('current-month').textContent =
+          `${monthNames[currentMonth]} ${currentYear}`;
+    
+        const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+        const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+        const daysInPrevMonth = new Date(currentYear, currentMonth, 0).getDate();
+    
+        const calendarGrid = document.getElementById('calendar-grid');
+    
+        const dayHeaders = calendarGrid.querySelectorAll('.calendar-day-header');
+        calendarGrid.innerHTML = '';
+        dayHeaders.forEach(header => calendarGrid.appendChild(header));
+    
+        for (let i = firstDay - 1; i >= 0; i--) {
+          const dayElement = createDayElement(daysInPrevMonth - i, true);
+          calendarGrid.appendChild(dayElement);
         }
-
-        function createDayElement(day, isOtherMonth) {
-            const dayElement = document.createElement('div');
-            dayElement.className = `calendar-day ${isOtherMonth ? 'other-month' : ''}`;
-            dayElement.textContent = day;
-            
-            if (!isOtherMonth) {
-                dayElement.addEventListener('click', () => selectDate(day));
-            }
-            
-            return dayElement;
+    
+        for (let day = 1; day <= daysInMonth; day++) {
+          const dayElement = createDayElement(day, false);
+          calendarGrid.appendChild(dayElement);
         }
-
-        function selectDate(day) {
-            // Remove previous selection
-            document.querySelectorAll('.calendar-day.selected').forEach(el => {
-                el.classList.remove('selected');
-            });
-
-            // Add selection to clicked day
-            event.target.classList.add('selected');
-            
-            selectedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
-            showTimeSlots();
+    
+        const totalCells = calendarGrid.children.length - 7;
+        const remainingCells = 42 - totalCells;
+        for (let day = 1; day <= remainingCells; day++) {
+          const dayElement = createDayElement(day, true);
+          calendarGrid.appendChild(dayElement);
         }
-
-        function showTimeSlots() {
-            const bookingInfo = document.getElementById('booking-info');
-            const dateKey = selectedDate.toDateString();
-            
-            bookingInfo.innerHTML = `
-                <h3>Available Times for ${selectedDate.toLocaleDateString()}</h3>
-                <div class="time-slots" id="time-slots-container"></div>
-            `;
-
-            const slotsContainer = document.getElementById('time-slots-container');
-            
-            timeSlots.forEach(time => {
-                const slotKey = `${dateKey}-${time}`;
-                const isBooked = bookedSlots[slotKey];
-                
-                const slotElement = document.createElement('div');
-                slotElement.className = `time-slot ${isBooked ? 'booked' : ''}`;
-                slotElement.textContent = time;
-                
-                if (!isBooked) {
-                    slotElement.addEventListener('click', () => bookSlot(slotKey, time));
-                }
-                
-                slotsContainer.appendChild(slotElement);
-            });
+      }
+    
+      function createDayElement(day, isOtherMonth) {
+        const dayElement = document.createElement('div');
+        dayElement.className = `calendar-day ${isOtherMonth ? 'other-month' : ''}`;
+        dayElement.textContent = day;
+    
+        if (!isOtherMonth) {
+          dayElement.addEventListener('click', () => selectDate(day));
         }
-
-        function bookSlot(slotKey, time) {
-            const confirmed = confirm(`Book appointment for ${selectedDate.toLocaleDateString()} at ${time}?`);
-            
-            if (confirmed) {
-                bookedSlots[slotKey] = true;
-                showTimeSlots(); // Refresh the time slots display
-                alert('Appointment booked successfully!');
-            }
+    
+        return dayElement;
+      }
+    
+      function selectDate(day) {
+        document.querySelectorAll('.calendar-day.selected').forEach(el => {
+          el.classList.remove('selected');
+        });
+    
+        event.target.classList.add('selected');
+        selectedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
+        loadBookedSlots().then(showTimeSlots);
+      }
+    
+      async function loadBookedSlots() {
+        bookedSlots = {}; // Reset for current day
+        const q = query(
+          collection(db, "bookings"),
+          where("date", "==", selectedDate.toDateString())
+        );
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach(doc => {
+          const data = doc.data();
+          const key = `${data.date}-${data.time}`;
+          bookedSlots[key] = true;
+        });
+      }
+    
+      function showTimeSlots() {
+        const bookingInfo = document.getElementById('booking-info');
+        const dateKey = selectedDate.toDateString();
+    
+        bookingInfo.innerHTML = `
+          <h3>Available Times for ${selectedDate.toLocaleDateString()}</h3>
+          <div class="time-slots" id="time-slots-container"></div>
+        `;
+    
+        const slotsContainer = document.getElementById('time-slots-container');
+        slotsContainer.innerHTML = '';
+    
+        timeSlots.forEach(time => {
+          const slotKey = `${dateKey}-${time}`;
+          const isBooked = bookedSlots[slotKey];
+    
+          const slotElement = document.createElement('div');
+          slotElement.className = `time-slot ${isBooked ? 'booked' : ''}`;
+          slotElement.textContent = time;
+    
+          if (!isBooked) {
+            slotElement.addEventListener('click', () => bookSlot(slotKey, time));
+          }
+    
+          slotsContainer.appendChild(slotElement);
+        });
+      }
+    
+      async function bookSlot(slotKey, time) {
+        const confirmed = confirm(`Book appointment for ${selectedDate.toLocaleDateString()} at ${time}?`);
+        if (!confirmed) return;
+    
+        try {
+          await addDoc(collection(db, "bookings"), {
+            date: selectedDate.toDateString(),
+            time: time,
+            timestamp: serverTimestamp()
+          });
+    
+          bookedSlots[slotKey] = true;
+          showTimeSlots();
+          alert('Appointment booked successfully!');
+        } catch (error) {
+          console.error("Booking error:", error);
+          alert("Failed to book appointment.");
         }
-
-        function changeMonth(direction) {
-            currentDate.setMonth(currentDate.getMonth() + direction);
-            selectedDate = null;
-            renderCalendar();
-            
-            // Reset booking info
-            document.getElementById('booking-info').innerHTML = 
-                '<p>Select a date to view available time slots</p>';
-        }
-
-        // Initialize calendar
+      }
+    
+      function changeMonth(direction) {
+        currentDate.setMonth(currentDate.getMonth() + direction);
+        selectedDate = null;
         renderCalendar();
-
-        // Auto-update calendar when month changes
-        setInterval(() => {
-            const now = new Date();
-            if (now.getMonth() !== currentDate.getMonth() || now.getFullYear() !== currentDate.getFullYear()) {
-                currentDate = new Date(now.getFullYear(), now.getMonth(), 1);
-                renderCalendar();
-            }
-        }, 24 * 60 * 60 * 1000); // Check daily
+    
+        document.getElementById('booking-info').innerHTML =
+          '<p>Select a date to view available time slots</p>';
+      }
+    
+      // Initial render
+      renderCalendar();
+    
+      // Auto-update calendar when month changes
+      setInterval(() => {
+        const now = new Date();
+    
+        // If we moved to a new month, re-render calendar
+        if (now.getMonth() !== currentDate.getMonth() || now.getFullYear() !== currentDate.getFullYear()) {
+          currentDate = new Date(now.getFullYear(), now.getMonth(), 1);
+          renderCalendar();
+        }
+    
+        // If a date is selected, refresh its time slots
+        if (selectedDate) {
+          loadBookedSlots().then(showTimeSlots);
+        }
+      }, 24 * 60 * 60 * 1000); // runs daily
     </script>
 </body>
 </html>
