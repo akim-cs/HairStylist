@@ -395,7 +395,7 @@
             margin-top: 10px;
         }
 
-        /* Footer with Instagram Logo */
+        /* Footer with Social Icons */
         .footer {
             background: #f1ead8;
             text-align: center;
@@ -403,26 +403,37 @@
             border-top: 1px solid #e8e8e8;
         }
 
-        .instagram-link {
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .social-link {
             display: inline-block;
             transition: all 0.3s ease;
             opacity: 0.8;
         }
 
-        .instagram-link:hover {
+        .social-link:hover {
             opacity: 1;
             transform: scale(1.1);
         }
 
-        .instagram-logo {
+        .social-logo {
             width: 40px;
             height: 40px;
             fill: #4a4a4a;
             transition: fill 0.3s ease;
         }
 
-        .instagram-link:hover .instagram-logo {
+        .social-link:hover .instagram-logo {
             fill: #e4405f;
+        }
+
+        .social-link:hover .email-logo {
+            fill: #ff8c42;
         }
 
         @keyframes fadeIn {
