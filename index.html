@@ -293,6 +293,108 @@
             cursor: not-allowed;
         }
 
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background-color: #f1ead8;
+            margin: 5% auto;
+            padding: 40px;
+            border: none;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            animation: slideIn 0.3s ease;
+        }
+
+        .close {
+            color: #4a4a4a;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            position: absolute;
+            right: 20px;
+            top: 15px;
+        }
+
+        .close:hover {
+            color: #2c2c2c;
+        }
+
+        .modal h2 {
+            color: #2c2c2c;
+            margin-bottom: 20px;
+            font-weight: 300;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #4a4a4a;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #4a4a4a;
+            background: #daddc6;
+            color: #2c2c2c;
+            font-family: 'Georgia', serif;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #ff8c42;
+            background: #ecd3bd;
+        }
+
+        .book-btn {
+            width: 100%;
+            padding: 15px;
+            background: #4a4a4a;
+            color: #f1ead8;
+            border: none;
+            cursor: pointer;
+            font-family: 'Georgia', serif;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .book-btn:hover {
+            background: #2c2c2c;
+        }
+
+        .book-btn:disabled {
+            background: #c0c0c0;
+            cursor: not-allowed;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            color: #4a4a4a;
+            margin-top: 10px;
+        }
+
         /* Footer with Instagram Logo */
         .footer {
             background: #f1ead8;
@@ -321,6 +423,16 @@
 
         .instagram-link:hover .instagram-logo {
             fill: #e4405f;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         /* Mobile Responsiveness */
@@ -378,6 +490,12 @@
             .footer {
                 padding: 40px 20px;
             }
+
+            .modal-content {
+                margin: 10% auto;
+                padding: 30px;
+                width: 95%;
+            }
         }
 
         @media (max-width: 480px) {
@@ -414,19 +532,19 @@
             <div class="portfolio-container">
                 <div class="portfolio-grid">
                     <div class="portfolio-item">
-                        <img src="images/IMG_2410.jpeg" alt="Modern Fade Cut" class="portfolio-image">
+                        <div class="portfolio-image">Modern Fade Cut</div>
                     </div>
                     <div class="portfolio-item">
-                        <img src="images/IMG_2556.jpeg" alt="Textured Crop Style" class="portfolio-image">
+                        <div class="portfolio-image">Textured Crop Style</div>
                     </div>
                     <div class="portfolio-item">
-                        <img src="images/IMG_2639.jpeg" alt="Clean Side Part" class="portfolio-image">
+                        <div class="portfolio-image">Clean Side Part</div>
                     </div>
                     <div class="portfolio-item">
-                        <img src="images/IMG_4500.JPG" alt="Contemporary Cut" class="portfolio-image">
+                        <div class="portfolio-image">Contemporary Cut</div>
                     </div>
                     <div class="portfolio-item">
-                        <img src="images/IMG_4637.JPG" alt="Stylish Layer Cut" class="portfolio-image">
+                        <div class="portfolio-image">Stylish Layer Cut</div>
                     </div>
                 </div>
             </div>
@@ -457,6 +575,40 @@
             </div>
         </section>
 
+        <!-- Booking Modal -->
+        <div id="booking-modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeBookingModal()">&times;</span>
+                <h2>Book Your Appointment</h2>
+                <p id="booking-details" style="text-align: center; margin-bottom: 30px; color: #4a4a4a;"></p>
+                
+                <form id="booking-form">
+                    <div class="form-group">
+                        <label for="client-name">Full Name *</label>
+                        <input type="text" id="client-name" name="name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="client-email">Email *</label>
+                        <input type="email" id="client-email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="client-phone">Phone Number</label>
+                        <input type="tel" id="client-phone" name="phone">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="client-instagram">Instagram Handle</label>
+                        <input type="text" id="client-instagram" name="instagram" placeholder="@username">
+                    </div>
+                    
+                    <button type="submit" class="book-btn" id="submit-booking">Confirm Booking</button>
+                    <div class="loading" id="booking-loading">Processing your booking...</div>
+                </form>
+            </div>
+        </div>
+
         <!-- Footer with Instagram Logo -->
         <footer class="footer">
             <a href="https://www.instagram.com/_kimandy/" class="instagram-link" id="instagram-link" target="_blank" rel="noopener noreferrer">
@@ -467,16 +619,95 @@
         </footer>
     </div>
 
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, query, where, onSnapshot } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-analytics.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCDBcHgEOYMS_Fwq2qXWBhP_uADt8N4szg",
+            authDomain: "hairstylist-f7b96.firebaseapp.com",
+            projectId: "hairstylist-f7b96",
+            storageBucket: "hairstylist-f7b96.firebasestorage.app",
+            messagingSenderId: "406149207191",
+            appId: "1:406149207191:web:61d1b7308a9b58f49305d2",
+            measurementId: "G-CVQZWFY5YY"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const analytics = getAnalytics(app);
+
+        // Make Firebase functions available globally
+        window.db = db;
+        window.addDoc = addDoc;
+        window.collection = collection;
+        window.getDocs = getDocs;
+        window.query = query;
+        window.where = where;
+        window.onSnapshot = onSnapshot;
+
+        console.log("Firebase initialized successfully");
+    </script>
+
     <script>
         // Calendar functionality
         let currentDate = new Date();
         let selectedDate = null;
-        let bookedSlots = {}; // Store booked appointments
+        let selectedTime = null;
+        let bookedSlots = new Set(); // Store booked appointments
 
         const timeSlots = [
             '10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM', 
             '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM', '6:00 PM'
         ];
+
+        // Load booked appointments from Firebase
+        async function loadBookedAppointments() {
+            try {
+                const appointmentsRef = window.collection(window.db, 'appointments');
+                const snapshot = await window.getDocs(appointmentsRef);
+                
+                bookedSlots.clear();
+                snapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const slotKey = `${data.date}-${data.time}`;
+                    bookedSlots.add(slotKey);
+                });
+                
+                // Refresh calendar display if a date is selected
+                if (selectedDate) {
+                    showTimeSlots();
+                }
+            } catch (error) {
+                console.error("Error loading appointments:", error);
+            }
+        }
+
+        // Set up real-time listener for appointments
+        function setupRealtimeListener() {
+            try {
+                const appointmentsRef = window.collection(window.db, 'appointments');
+                window.onSnapshot(appointmentsRef, (snapshot) => {
+                    bookedSlots.clear();
+                    snapshot.forEach((doc) => {
+                        const data = doc.data();
+                        const slotKey = `${data.date}-${data.time}`;
+                        bookedSlots.add(slotKey);
+                    });
+                    
+                    // Refresh display if needed
+                    if (selectedDate) {
+                        showTimeSlots();
+                    }
+                });
+            } catch (error) {
+                console.error("Error setting up realtime listener:", error);
+            }
+        }
 
         function renderCalendar() {
             const monthNames = [
@@ -560,27 +791,166 @@
             
             timeSlots.forEach(time => {
                 const slotKey = `${dateKey}-${time}`;
-                const isBooked = bookedSlots[slotKey];
+                const isBooked = bookedSlots.has(slotKey);
                 
                 const slotElement = document.createElement('div');
                 slotElement.className = `time-slot ${isBooked ? 'booked' : ''}`;
                 slotElement.textContent = time;
                 
                 if (!isBooked) {
-                    slotElement.addEventListener('click', () => bookSlot(slotKey, time));
+                    slotElement.addEventListener('click', () => openBookingModal(dateKey, time));
                 }
                 
                 slotsContainer.appendChild(slotElement);
             });
         }
 
-        function bookSlot(slotKey, time) {
-            const confirmed = confirm(`Book appointment for ${selectedDate.toLocaleDateString()} at ${time}?`);
+        function openBookingModal(date, time) {
+            selectedTime = time;
+            const modal = document.getElementById('booking-modal');
+            const bookingDetails = document.getElementById('booking-details');
             
-            if (confirmed) {
-                bookedSlots[slotKey] = true;
-                showTimeSlots(); // Refresh the time slots display
-                alert('Appointment booked successfully!');
+            const formattedDate = new Date(date).toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            
+            bookingDetails.textContent = `${formattedDate} at ${time}`;
+            modal.style.display = 'block';
+        }
+
+        function closeBookingModal() {
+            const modal = document.getElementById('booking-modal');
+            modal.style.display = 'none';
+            
+            // Reset form
+            document.getElementById('booking-form').reset();
+            document.getElementById('submit-booking').disabled = false;
+            document.getElementById('booking-loading').style.display = 'none';
+        }
+
+        // Handle booking form submission
+        document.getElementById('booking-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submit-booking');
+            const loadingDiv = document.getElementById('booking-loading');
+            
+            // Disable form and show loading
+            submitBtn.disabled = true;
+            loadingDiv.style.display = 'block';
+            
+            // Get form data
+            const formData = new FormData(e.target);
+            const bookingData = {
+                name: formData.get('name'),
+                email: formData.get('email'),
+                phone: formData.get('phone') || '',
+                instagram: formData.get('instagram') || '',
+                date: selectedDate.toDateString(),
+                time: selectedTime,
+                timestamp: new Date().toISOString(),
+                status: 'confirmed'
+            };
+            
+            try {
+                // Save to Firebase
+                const docRef = await window.addDoc(window.collection(window.db, 'appointments'), bookingData);
+                console.log("Appointment booked with ID: ", docRef.id);
+                
+                // Send email notification (using EmailJS or similar service)
+                await sendNotificationEmail(bookingData);
+                
+                // Success feedback
+                alert('Appointment booked successfully! You will receive a confirmation email shortly.');
+                closeBookingModal();
+                
+            } catch (error) {
+                console.error("Error booking appointment:", error);
+                alert('Sorry, there was an error booking your appointment. Please try again.');
+                
+                // Re-enable form
+                submitBtn.disabled = false;
+                loadingDiv.style.display = 'none';
+            }
+        });
+
+        // Send notification email using EmailJS
+        async function sendNotificationEmail(bookingData) {
+            try {
+                // EmailJS configuration - you'll need to set this up at emailjs.com
+                const serviceID = 'your_service_id'; // Replace with your EmailJS service ID
+                const templateID = 'your_template_id'; // Replace with your EmailJS template ID
+                const userID = 'your_user_id'; // Replace with your EmailJS user ID
+
+                // Email template parameters
+                const templateParams = {
+                    to_name: 'Andy Kim', // Your name
+                    to_email: 'your-email@example.com', // Your email address
+                    client_name: bookingData.name,
+                    client_email: bookingData.email,
+                    client_phone: bookingData.phone,
+                    client_instagram: bookingData.instagram,
+                    appointment_date: new Date(bookingData.date).toLocaleDateString('en-US', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    }),
+                    appointment_time: bookingData.time,
+                    booking_timestamp: new Date(bookingData.timestamp).toLocaleString()
+                };
+
+                // Load EmailJS if not already loaded
+                if (typeof emailjs === 'undefined') {
+                    const script = document.createElement('script');
+                    script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
+                    document.head.appendChild(script);
+                    
+                    await new Promise((resolve) => {
+                        script.onload = resolve;
+                    });
+                    
+                    emailjs.init(userID);
+                }
+
+                // Send email
+                await emailjs.send(serviceID, templateID, templateParams);
+                console.log('Notification email sent successfully');
+                
+            } catch (error) {
+                console.error('Error sending notification email:', error);
+                // Don't throw error - booking should still succeed even if email fails
+            }
+        }
+
+        // Alternative notification function using a webhook/API
+        async function sendWebhookNotification(bookingData) {
+            try {
+                // Example webhook URL - replace with your own service
+                const webhookUrl = 'https://your-webhook-service.com/appointment';
+                
+                const response = await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: `New appointment booking from ${bookingData.name}`,
+                        appointment: bookingData,
+                        notification_type: 'new_booking'
+                    })
+                });
+                
+                if (response.ok) {
+                    console.log('Webhook notification sent successfully');
+                } else {
+                    console.error('Webhook notification failed');
+                }
+            } catch (error) {
+                console.error('Error sending webhook notification:', error);
             }
         }
 
@@ -594,8 +964,24 @@
                 '<p>Select a date to view available time slots</p>';
         }
 
-        // Initialize calendar
-        renderCalendar();
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('booking-modal');
+            if (event.target === modal) {
+                closeBookingModal();
+            }
+        });
+
+        // Initialize calendar and load appointments
+        document.addEventListener('DOMContentLoaded', function() {
+            renderCalendar();
+            
+            // Wait for Firebase to initialize before loading appointments
+            setTimeout(() => {
+                loadBookedAppointments();
+                setupRealtimeListener();
+            }, 1000);
+        });
 
         // Auto-update calendar when month changes
         setInterval(() => {
@@ -605,6 +991,10 @@
                 renderCalendar();
             }
         }, 24 * 60 * 60 * 1000); // Check daily
+
+        // Make functions globally available
+        window.changeMonth = changeMonth;
+        window.closeBookingModal = closeBookingModal;
     </script>
 </body>
 </html>
