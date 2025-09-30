@@ -1,0 +1,525 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Georgia', serif;
+  background: #f1ead8;
+  color: #5a5a5a;
+  line-height: 1.7;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Header Section - Horizontal Layers */
+.header {
+  background: #daddc6;
+  padding: 60px 20px;
+}
+
+.header-layer {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.header-layer:last-child {
+  margin-bottom: 0;
+}
+
+.name-layer {
+  position: relative;
+}
+
+.name-layer::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  height: 2px;
+  background: #ff8c42;
+}
+
+.name-layer h1 {
+  font-size: 4rem;
+  color: #4a4a4a;
+  font-weight: 300;
+  letter-spacing: 3px;
+  margin: 0;
+  padding-bottom: 15px;
+}
+
+.bio-layer {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.bio-layer p {
+  font-size: 1.2rem;
+  color: #4a4a4a;
+  font-style: italic;
+  margin: 0;
+}
+
+.work-layer h2 {
+  font-size: 2.5rem;
+  color: #4a4a4a;
+  font-weight: 300;
+  letter-spacing: 2px;
+  margin: 0;
+}
+
+/* Portfolio Section - Horizontal Layout */
+.portfolio {
+  background: #f1ead8;
+  padding: 80px 20px;
+  overflow-x: auto;
+}
+
+.portfolio-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.portfolio-grid {
+  display: flex;
+  gap: 60px;
+  justify-content: center;
+  align-items: center;
+  min-width: max-content;
+  padding: 20px 0;
+}
+
+.portfolio-item {
+  text-align: center;
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+}
+
+.portfolio-item:hover {
+  transform: translateY(-10px);
+}
+
+.portfolio-image {
+  width: 220px;
+  height: 280px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+/* Calendar Section */
+.calendar-section {
+  background: #daddc6;
+  padding: 100px 20px;
+  text-align: center;
+}
+
+.calendar-section .section-title {
+  color: #2c2c2c;
+  text-align: center;
+  font-size: 2.2rem;
+  margin-bottom: 50px;
+  font-weight: 300;
+  letter-spacing: 1px;
+  padding-bottom: 15px;
+  position: relative;
+}
+
+.calendar-section .section-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  height: 2px;
+  background: #ff8c42;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+.calendar-nav {
+  background: transparent;
+  color: #2c2c2c;
+  border: 1px solid #2c2c2c;
+  padding: 8px 16px;
+  border-radius: 0;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-family: 'Georgia', serif;
+  transition: all 0.3s ease;
+}
+
+.calendar-nav:hover {
+  background: #ecd3bd;
+  color: #f1ead8;
+  border-color: #ecd3bd;
+}
+
+.calendar-month {
+  font-size: 1.8rem;
+  color: #2c2c2c;
+  font-weight: 300;
+  letter-spacing: 1px;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+  margin-bottom: 40px;
+  background: #c5c8b8;
+  border: 1px solid #c5c8b8;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.calendar-day-header {
+  text-align: center;
+  font-weight: 400;
+  color: #4a4a4a;
+  padding: 15px 5px;
+  background: #f1ead8;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+}
+
+.calendar-day {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f1ead8;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #4a4a4a;
+  font-weight: 500;
+  border: none;
+  font-family: 'Georgia', serif;
+}
+
+.calendar-day:hover {
+  background: #ecd3bd;
+  color: #f1ead8;
+}
+
+.calendar-day.selected {
+  background: #ecd3bd;
+  color: #f1ead8;
+}
+
+.calendar-day.other-month {
+  color: #c0c0c0;
+  background: #f8f8f8;
+}
+
+.booking-info {
+  text-align: center;
+  margin-top: 40px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.booking-info h3 {
+  color: #4a4a4a;
+  font-size: 1.3rem;
+  font-weight: 300;
+  margin-bottom: 30px;
+}
+
+.booking-info p {
+  color: #4a4a4a;
+}
+
+.time-slots {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin: 30px 0;
+}
+
+.time-slot {
+  background: #f1ead8;
+  border: 1px solid #4a4a4a;
+  color: #4a4a4a;
+  padding: 10px 20px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.3s ease;
+  font-family: 'Georgia', serif;
+  font-size: 0.9rem;
+}
+
+.time-slot:hover {
+  background: #ecd3bd;
+  color: #f1ead8;
+  border-color: #ecd3bd;
+}
+
+.time-slot.booked {
+  background: #f0f0f0;
+  color: #c0c0c0;
+  border-color: #e0e0e0;
+  cursor: not-allowed;
+}
+
+/* Modal Styles */
+.modal {
+  display: block;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  animation: fadeIn 0.3s ease;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-content {
+  background-color: #f1ead8;
+  margin: 5% auto;
+  padding: 40px;
+  border: none;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+  animation: slideIn 0.3s ease;
+}
+
+.close {
+  color: #4a4a4a;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  position: absolute;
+  right: 20px;
+  top: 15px;
+  background: none;
+  border: none;
+}
+
+.close:hover {
+  color: #2c2c2c;
+}
+
+.modal h2 {
+  color: #2c2c2c;
+  margin-bottom: 20px;
+  font-weight: 300;
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #4a4a4a;
+  font-weight: 500;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #4a4a4a;
+  background: #daddc6;
+  color: #2c2c2c;
+  font-family: 'Georgia', serif;
+  font-size: 1rem;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #ff8c42;
+  background: #ecd3bd;
+}
+
+.book-btn {
+  width: 100%;
+  padding: 15px;
+  background: #4a4a4a;
+  color: #f1ead8;
+  border: none;
+  cursor: pointer;
+  font-family: 'Georgia', serif;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+}
+
+.book-btn:hover {
+  background: #2c2c2c;
+}
+
+.book-btn:disabled {
+  background: #c0c0c0;
+  cursor: not-allowed;
+}
+
+.loading {
+  display: none;
+  text-align: center;
+  color: #4a4a4a;
+  margin-top: 10px;
+}
+
+.loading.show {
+  display: block;
+}
+
+/* Footer with Social Icons */
+.footer {
+  background: #f1ead8;
+  text-align: center;
+  padding: 60px 20px;
+  border-top: 1px solid #e8e8e8;
+}
+
+.social-links {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  align-items: center;
+}
+
+.social-link {
+  display: inline-block;
+  transition: all 0.3s ease;
+  opacity: 0.8;
+}
+
+.social-link:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.social-logo {
+  width: 40px;
+  height: 40px;
+  fill: #4a4a4a;
+  transition: fill 0.3s ease;
+}
+
+.social-link:hover .instagram-logo {
+  fill: #e4405f;
+}
+
+.social-link:hover .email-logo {
+  fill: #ff8c42;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateY(-50px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .header {
+    padding: 40px 20px;
+  }
+  
+  .name-layer h1 {
+    font-size: 2.8rem;
+    letter-spacing: 2px;
+  }
+
+  .bio-layer p {
+    font-size: 1.1rem;
+  }
+
+  .work-layer h2 {
+    font-size: 2rem;
+  }
+  
+  .portfolio {
+    padding: 60px 10px;
+  }
+  
+  .portfolio-grid {
+    gap: 30px;
+    padding: 20px;
+    justify-content: flex-start;
+  }
+
+  .portfolio-image {
+    width: 180px;
+    height: 220px;
+  }
+  
+  .calendar-section {
+    padding: 80px 20px;
+  }
+  
+  .calendar-header {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .time-slots {
+    gap: 8px;
+  }
+  
+  .time-slot {
+    padding: 8px 16px;
+    font-size: 0.85rem;
+  }
+  
+  .footer {
+    padding: 40px 20px;
+  }
+
+  .modal-content {
+    margin: 10% auto;
+    padding: 30px;
+    width: 95%;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-layer {
+    margin-bottom: 30px;
+  }
+
+  .portfolio-grid {
+    gap: 20px;
+  }
+
+  .portfolio-image {
+    width: 160px;
+    height: 200px;
+  }
+} 
