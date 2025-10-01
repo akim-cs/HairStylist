@@ -44,20 +44,17 @@ The booking system includes automatic email notifications:
 - npm or yarn
 - Firebase project (already configured)
 
-### Installation
+### Installation & Running
 
-1. **Install dependencies**:
-   ```bash
+1. ```
    npm install
    ```
 
-2. **Start the development server**:
-   ```bash
+2. ```bash
    npm start
    ```
 
-3. **Build for production**:
-   ```bash
+3. ```bash
    npm run build
    ```
 
@@ -106,98 +103,3 @@ public/
 ├── images/              # Portfolio images
 └── index.html           # HTML template
 ```
-
-## Key Features
-
-### Calendar Component
-- Interactive monthly calendar
-- Real-time availability checking
-- Firebase integration for booking management
-- Responsive design for mobile devices
-
-### Booking System
-- Form validation
-- Real-time slot availability
-- Firebase Firestore integration
-- Email notifications to both parties
-- Success/error handling
-
-### Portfolio Display
-- Horizontal scrolling gallery
-- Hover animations
-- Responsive image sizing
-- Optimized for mobile viewing
-
-## Customization
-
-### Styling
-All styles are in `src/index.css`. The color scheme uses:
-- Primary: `#daddc6` (light green)
-- Secondary: `#f1ead8` (cream)
-- Accent: `#ff8c42` (orange)
-- Text: `#4a4a4a` (dark gray)
-
-### Content
-- Update stylist information in `src/components/Header.js`
-- Add/remove portfolio images in `src/components/Portfolio.js`
-- Modify time slots in `src/components/Calendar.js`
-- Update social media links in `src/components/Footer.js`
-
-## Deployment
-
-### Firebase Hosting (Recommended)
-
-1. Install Firebase CLI:
-   ```bash
-   npm install -g firebase-tools
-   ```
-
-2. Login to Firebase:
-   ```bash
-   firebase login
-   ```
-
-3. Initialize Firebase hosting:
-   ```bash
-   firebase init hosting
-   ```
-
-4. Build the project:
-   ```bash
-   npm run build
-   ```
-
-5. Deploy:
-   ```bash
-   firebase deploy
-   ```
-
-### Other Hosting Options
-
-The built files in the `build/` directory can be deployed to any static hosting service:
-- Netlify
-- Vercel
-- GitHub Pages
-- AWS S3
-
-## Browser Support
-
-- Chrome (latest)
-- Firefox (latest)
-- Safari (latest)
-- Edge (latest)
-
-## Mobile Responsiveness
-
-The website is fully responsive and optimized for:
-- Desktop (1200px+)
-- Tablet (768px - 1199px)
-- Mobile (320px - 767px)
-
-## License
-
-This project is private and proprietary.
-
-## Support
-
-For technical support or questions about the booking system, please contact the development team.
