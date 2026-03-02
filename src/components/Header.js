@@ -8,7 +8,8 @@ const Header = () => {
       </div>
       
       <div className="header-layer bio-layer">
-        <p>I'm a self-taught hairstylist with over six years of experience. I specialize in personalized cuts and modern styles.</p>
+        <p>Hairstylist & Barber — 7+ Years Experience<br />
+        Modern cuts, clean fades, and precision layering. Every appointment starts with a personalized consultation to deliver a look that fits your vibe, face shape, and lifestyle.</p>
       </div>
     </header>
   );
