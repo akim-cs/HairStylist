@@ -2,7 +2,6 @@ import React from 'react';
 import Header from './components/Header';
 import Portfolio from './components/Portfolio';
 import Calendar from './components/Calendar';
-import Footer from './components/Footer';
 
 function App() {
   return (
@@ -12,7 +11,6 @@ function App() {
         <Portfolio />
         <Calendar />
       </section>
-      <Footer />
     </div>
   );
 }
