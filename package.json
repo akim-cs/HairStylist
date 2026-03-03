@@ -1,6 +1,7 @@
 {
   "name": "hairstylist-react",
   "version": "1.0.0",
+  "homepage": "https://akim-cs.github.io/HairStylist",
   "private": true,
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
