@@ -197,7 +197,7 @@ const Calendar = () => {
       
     } catch (error) {
       console.error("Error booking appointment:", error);
-      alert('Sorry, there was an error booking your appointment. Please try again.');
+      alert('Sorry I am not currently taking bookings right now');
     }
   };
 
