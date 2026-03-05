@@ -4,11 +4,11 @@ const Portfolio = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const portfolioImages = [
-    { src: '/images/IMG_2410.jpeg', alt: 'Modern Fade Cut' },
-    { src: '/images/IMG_2556.jpeg', alt: 'Textured Crop Style' },
-    { src: '/images/IMG_2639.jpeg', alt: 'Clean Side Part' },
-    { src: '/images/IMG_4500.JPG', alt: 'Contemporary Cut' },
-    { src: '/images/IMG_4637.JPG', alt: 'Stylish Layer Cut' }
+    { src: `${process.env.PUBLIC_URL}/images/IMG_2410.jpeg`, alt: 'Modern Fade Cut' },
+    { src: `${process.env.PUBLIC_URL}/images/IMG_2556.jpeg`, alt: 'Textured Crop Style' },
+    { src: `${process.env.PUBLIC_URL}/images/IMG_2639.jpeg`, alt: 'Clean Side Part' },
+    { src: `${process.env.PUBLIC_URL}/images/IMG_4500.JPG`, alt: 'Contemporary Cut' },
+    { src: `${process.env.PUBLIC_URL}/images/IMG_4637.JPG`, alt: 'Stylish Layer Cut' }
   ];
 
   const nextImage = () => {
