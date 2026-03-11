@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { db } from '../firebase';
 import { collection, addDoc, getDocs, onSnapshot } from 'firebase/firestore';
 import BookingModal from './BookingModal';
-import { sendBookingNotifications } from '../services/emailService';
 import { sendWebhookNotification } from '../services/webhookService';
 
 const Calendar = () => {
@@ -182,15 +181,7 @@ const Calendar = () => {
         alert('Appointment booked successfully! Andy has been notified and will contact you shortly.');
       } catch (webhookError) {
         console.error("Webhook notification failed:", webhookError);
-        
-        // Fallback to email notifications
-        try {
-          await sendBookingNotifications(bookingData);
-          alert('Appointment booked successfully! Confirmation emails have been sent to both you and Andy.');
-        } catch (emailError) {
-          console.error("Email notification also failed:", emailError);
-          alert('Appointment booked successfully! However, there was an issue sending notifications. Please contact Andy directly.');
-        }
+        alert('Appointment booked successfully! However, there was an issue sending notifications. Please contact Andy directly.');
       }
       
       closeBookingModal();
