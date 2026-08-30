@@ -70,3 +70,9 @@ node_modules/
 
 # dataconnect generated files
 .dataconnect
+
+# macOS system files
+.DS_Store
+
+# Root images directory (app serves from public/images/)
+images/
