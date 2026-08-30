@@ -1,12 +1,15 @@
 const functions = require("firebase-functions");
-const fetch = require("node-fetch"); // This line is fine
+const fetch = require("node-fetch");
 
+// WARNING: The client already calls this webhook directly in webhookService.js.
+// Deploying this function will cause double notifications for every booking.
+// Before deploying, remove the sendWebhookNotification call from Calendar.js.
 const ZAPIER_WEBHOOK_URL =
   "https://hooks.zapier.com/hooks/catch/23695225/u3if46b/";
 
 exports.notifyZapierOnBooking = functions.firestore
     .document("appointments/{docId}")
-    .onCreate(async (snap, context) => {
+    .onCreate(async (snap) => {
       const bookingData = snap.data();
 
       try {
