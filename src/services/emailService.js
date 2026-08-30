@@ -1,8 +1,8 @@
 import emailjs from '@emailjs/browser';
 
-const SERVICE_ID = 'service_4p6a9da';
-const TEMPLATE_ID = '3y2lt68';
-const PUBLIC_KEY = 'FnC4HOFKz77CDny3R';
+const SERVICE_ID = process.env.REACT_APP_EMAILJS_SERVICE_ID;
+const TEMPLATE_ID = process.env.REACT_APP_EMAILJS_TEMPLATE_ID;
+const PUBLIC_KEY = process.env.REACT_APP_EMAILJS_PUBLIC_KEY;
 
 export const sendBookingNotification = async (bookingData) => {
   const templateParams = {
