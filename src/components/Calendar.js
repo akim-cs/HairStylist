@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { db } from '../firebase';
 import { collection, addDoc, getDocs, onSnapshot } from 'firebase/firestore';
 import BookingModal from './BookingModal';
-import { sendWebhookNotification } from '../services/webhookService';
+import { sendBookingNotification } from '../services/emailService';
 
 const Calendar = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -175,13 +175,13 @@ const Calendar = () => {
       const docRef = await addDoc(collection(db, 'appointments'), bookingData);
       console.log("Appointment booked with ID: ", docRef.id);
       
-      // Send webhook notification (primary method)
+      // Send email notification via EmailJS
       try {
-        await sendWebhookNotification(bookingData);
+        await sendBookingNotification(bookingData);
         alert('Appointment booked successfully! Andy has been notified and will contact you shortly.');
-      } catch (webhookError) {
-        console.error("Webhook notification failed:", webhookError);
-        alert('Appointment booked successfully! However, there was an issue sending notifications. Please contact Andy directly.');
+      } catch (emailError) {
+        console.error("Email notification failed:", emailError);
+        alert('Appointment booked successfully! However, there was an issue sending the notification email. Please contact Andy directly.');
       }
       
       closeBookingModal();
