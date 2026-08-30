@@ -196,9 +196,10 @@ const Calendar = () => {
 
   return (
     <>
-      <section className="calendar-section">
+      <section className="calendar-section" id="booking">
         <h2 className="section-title">Book an Appointment</h2>
-        
+        <p className="section-subtitle">Select a date & time</p>
+
         <div className="calendar-header">
           <button className="calendar-nav" onClick={() => changeMonth(-1)}>
             ← Previous

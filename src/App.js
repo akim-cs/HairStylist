@@ -7,10 +7,8 @@ function App() {
   return (
     <div className="container">
       <Header />
-      <section className="main-content">
-        <Portfolio />
-        <Calendar />
-      </section>
+      <Portfolio />
+      <Calendar />
     </div>
   );
 }
