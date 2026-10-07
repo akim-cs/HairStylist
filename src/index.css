@@ -673,14 +673,16 @@ body {
 
 /* Admin calendar: blocked / partial day indicators */
 .calendar-day.admin-day-blocked {
-  background: #f5e8e8;
-  color: #c0665a;
+  background: var(--cream);
+  color: var(--muted);
   text-decoration: line-through;
+  cursor: pointer;
 }
 
 .calendar-day.admin-day-blocked:hover {
-  background: #e8cfc9;
-  color: #a04e43;
+  background: var(--border);
+  color: var(--text);
+  text-decoration: none;
 }
 
 .calendar-day.admin-day-partial {
@@ -695,7 +697,7 @@ body {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #c8914a;
+  background: var(--muted);
   display: block;
 }
 
@@ -723,8 +725,8 @@ body {
   border-radius: 50%;
 }
 
-.admin-legend-blocked { background: #c0665a; }
-.admin-legend-partial { background: #c8914a; }
+.admin-legend-blocked { background: var(--muted); }
+.admin-legend-partial { background: var(--border); border: 1px solid var(--muted); }
 
 /* Admin time slots */
 .admin-slots-wrap {
@@ -795,26 +797,28 @@ body {
 }
 
 .admin-slot-open {
-  border-color: #6baa7a;
-  color: #3d7a50;
+  border-color: var(--text);
+  color: var(--text);
 }
 
 .admin-slot-open:hover {
-  background: #6baa7a;
-  border-color: #6baa7a;
+  background: var(--text);
+  border-color: var(--text);
   color: var(--white);
 }
 
 .admin-slot-blocked {
-  background: #f5e8e8;
-  border-color: #c0665a;
-  color: #c0665a;
+  background: var(--cream);
+  border-color: var(--border);
+  color: var(--muted);
+  text-decoration: line-through;
 }
 
 .admin-slot-blocked:hover {
-  background: #c0665a;
-  border-color: #c0665a;
+  background: var(--text);
+  border-color: var(--text);
   color: var(--white);
+  text-decoration: none;
 }
 
 .admin-slot-status {
