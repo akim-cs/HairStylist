@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { auth, db } from '../firebase';
 import { GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from 'firebase/auth';
 import { doc, setDoc, collection, onSnapshot } from 'firebase/firestore';
+import TimeSlotSection from './TimeSlotSection';
 
 const ADMIN_EMAIL = process.env.REACT_APP_ADMIN_EMAIL;
 
@@ -232,11 +233,15 @@ const AdminDashboard = () => {
         </div>
 
         {selectedDate && (
-          <div className="admin-slots-wrap">
-            <div className="admin-slots-header">
-              <h3 className="admin-slots-date">
-                {selectedDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
-              </h3>
+          <TimeSlotSection
+            label={selectedDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
+            slots={TIME_SLOTS.map(time => ({
+              time,
+              faded: isSlotBlocked(selectedKey, time),
+              disabled: saving,
+            }))}
+            onSlotClick={toggleTimeSlot}
+            action={
               <button
                 className={`admin-toggle-day-btn ${dayFullyBlocked ? 'admin-toggle-day-unblock' : ''}`}
                 onClick={toggleEntireDay}
@@ -244,33 +249,14 @@ const AdminDashboard = () => {
               >
                 {dayFullyBlocked ? 'Unblock All' : 'Block All Day'}
               </button>
-            </div>
-
-            <div className="time-slots">
-              {TIME_SLOTS.map((time) => {
-                const blocked = isSlotBlocked(selectedKey, time);
-                return (
-                  <button
-                    key={time}
-                    className={`time-slot admin-slot ${blocked ? 'admin-slot-blocked' : 'admin-slot-open'}`}
-                    onClick={() => toggleTimeSlot(time)}
-                    disabled={saving}
-                  >
-                    {time}
-                    <span className="admin-slot-status">{blocked ? '✕' : '✓'}</span>
-                  </button>
-                );
-              })}
-            </div>
-            <p className="admin-slots-hint">
-              {saving ? 'Saving…' : 'Click a slot to toggle it. Red = blocked for clients.'}
-            </p>
-          </div>
+            }
+            hint={saving ? 'Saving…' : 'Click a slot to toggle availability.'}
+          />
         )}
 
         {!selectedDate && (
-          <div className="admin-slots-wrap admin-slots-empty">
-            <p>Select a date above to manage its time slots.</p>
+          <div className="booking-info">
+            <p>Select a date to manage its time slots.</p>
           </div>
         )}
       </div>

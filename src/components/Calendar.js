@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { db } from '../firebase';
 import { collection, addDoc, getDocs, onSnapshot } from 'firebase/firestore';
 import BookingModal from './BookingModal';
+import TimeSlotSection from './TimeSlotSection';
 import { sendBookingNotification } from '../services/emailService';
 
 const TIME_SLOTS_ALL = [
@@ -141,29 +142,18 @@ const Calendar = () => {
       );
     }
 
-    return (
-      <div className="booking-info">
-        <h3>Available Times for {selectedDate.toLocaleDateString()}</h3>
-        <div className="time-slots">
-          {timeSlots.map(time => {
-            const slotKey = `${dateKey}-${time}`;
-            const isBooked = bookedSlots.has(slotKey);
-            const isBlocked = (blockedSlots[dateKey] || []).includes(time);
-            const unavailable = isBooked || isBlocked;
+    const slots = timeSlots.map(time => {
+      const slotKey = `${dateKey}-${time}`;
+      const unavailable = bookedSlots.has(slotKey) || (blockedSlots[dateKey] || []).includes(time);
+      return { time, faded: unavailable, disabled: unavailable };
+    });
 
-            return (
-              <button
-                key={time}
-                className={`time-slot ${unavailable ? 'booked' : ''}`}
-                onClick={() => !unavailable && openBookingModal(dateKey, time)}
-                disabled={unavailable}
-              >
-                {time}
-              </button>
-            );
-          })}
-        </div>
-      </div>
+    return (
+      <TimeSlotSection
+        label={`Available Times for ${selectedDate.toLocaleDateString()}`}
+        slots={slots}
+        onSlotClick={(time) => openBookingModal(dateKey, time)}
+      />
     );
   };
 

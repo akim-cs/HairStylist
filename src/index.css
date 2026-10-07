@@ -336,11 +336,16 @@ body {
   color: var(--white);
 }
 
-.time-slot.booked {
+.time-slot.slot-faded {
   background: transparent;
-  color: var(--border);
+  color: var(--muted);
   border-color: var(--border);
-  cursor: not-allowed;
+}
+
+.time-slot.slot-faded:not(:disabled):hover {
+  background: var(--text);
+  border-color: var(--text);
+  color: var(--white);
 }
 
 /* ── Modal ──────────────────────────────────── */
@@ -504,7 +509,6 @@ body {
   color: var(--border);
   background: var(--cream);
   cursor: not-allowed;
-  text-decoration: line-through;
 }
 
 /* ── Admin page ─────────────────────────────── */
@@ -675,7 +679,6 @@ body {
 .calendar-day.admin-day-blocked {
   background: var(--cream);
   color: var(--muted);
-  text-decoration: line-through;
   cursor: pointer;
 }
 
@@ -728,40 +731,14 @@ body {
 .admin-legend-blocked { background: var(--muted); }
 .admin-legend-partial { background: var(--border); border: 1px solid var(--muted); }
 
-/* Admin time slots */
-.admin-slots-wrap {
-  background: var(--white);
-  border: 1px solid var(--border);
-  padding: 32px;
-}
-
-.admin-slots-empty {
-  text-align: center;
-  padding: 40px;
-}
-
-.admin-slots-empty p {
-  font-family: 'Inter', sans-serif;
-  font-size: 0.8rem;
-  color: var(--muted);
-}
-
-.admin-slots-header {
+/* Shared time slot section header (used when an action button sits beside the label) */
+.slot-section-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   flex-wrap: wrap;
   gap: 12px;
-}
-
-.admin-slots-date {
-  font-family: 'Inter', sans-serif;
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--text);
 }
 
 .admin-toggle-day-btn {
@@ -789,47 +766,10 @@ body {
   border: 1px solid var(--border);
 }
 
-.admin-slot {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.admin-slot-open {
-  border-color: var(--text);
-  color: var(--text);
-}
-
-.admin-slot-open:hover {
-  background: var(--text);
-  border-color: var(--text);
-  color: var(--white);
-}
-
-.admin-slot-blocked {
-  background: var(--cream);
-  border-color: var(--border);
-  color: var(--muted);
-  text-decoration: line-through;
-}
-
-.admin-slot-blocked:hover {
-  background: var(--text);
-  border-color: var(--text);
-  color: var(--white);
-  text-decoration: none;
-}
-
-.admin-slot-status {
-  font-size: 0.7rem;
-  font-weight: 700;
-}
-
-.admin-slots-hint {
+.slot-section-hint {
   margin-top: 16px;
   font-family: 'Inter', sans-serif;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   color: var(--muted);
   text-align: center;
   letter-spacing: 0.5px;
