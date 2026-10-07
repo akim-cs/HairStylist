@@ -10,6 +10,7 @@ const Header = () => {
         every appointment tailored to you.
       </p>
       <a href="#booking" className="hero-cta">Book an Appointment →</a>
+      <p className="hero-price">$35 flat rate · all services</p>
     </header>
   );
 };

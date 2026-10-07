@@ -4,18 +4,21 @@ import { collection, addDoc, getDocs, onSnapshot } from 'firebase/firestore';
 import BookingModal from './BookingModal';
 import { sendBookingNotification } from '../services/emailService';
 
+const TIME_SLOTS_ALL = [
+  '10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM',
+  '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM', '6:00 PM'
+];
+
 const Calendar = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
   const [bookedSlots, setBookedSlots] = useState(new Set());
+  const [blockedSlots, setBlockedSlots] = useState({});
   const [showModal, setShowModal] = useState(false);
   const [bookingDetails, setBookingDetails] = useState('');
 
-  const timeSlots = [
-    '10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM', 
-    '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM', '6:00 PM'
-  ];
+  const timeSlots = TIME_SLOTS_ALL;
 
   const monthNames = [
     'January', 'February', 'March', 'April', 'May', 'June',
@@ -58,6 +61,19 @@ const Calendar = () => {
       setBookedSlots(booked);
     });
 
+    return () => unsubscribe();
+  }, []);
+
+  // Real-time listener for barber-blocked availability
+  useEffect(() => {
+    const availRef = collection(db, 'availability');
+    const unsubscribe = onSnapshot(availRef, (snapshot) => {
+      const blocked = {};
+      snapshot.forEach((doc) => {
+        blocked[doc.id] = doc.data().blockedTimes || [];
+      });
+      setBlockedSlots(blocked);
+    });
     return () => unsubscribe();
   }, []);
 
@@ -105,11 +121,26 @@ const Calendar = () => {
     setSelectedDate(newSelectedDate);
   };
 
+  const isDayFullyBlocked = (dateKey) => {
+    const blocked = blockedSlots[dateKey] || [];
+    return timeSlots.every((t) => blocked.includes(t));
+  };
+
   const showTimeSlots = () => {
     if (!selectedDate) return null;
 
     const dateKey = selectedDate.toDateString();
-    
+
+    if (isDayFullyBlocked(dateKey)) {
+      return (
+        <div className="booking-info">
+          <p style={{ color: 'var(--muted)', fontStyle: 'italic' }}>
+            No availability on this date.
+          </p>
+        </div>
+      );
+    }
+
     return (
       <div className="booking-info">
         <h3>Available Times for {selectedDate.toLocaleDateString()}</h3>
@@ -117,13 +148,15 @@ const Calendar = () => {
           {timeSlots.map(time => {
             const slotKey = `${dateKey}-${time}`;
             const isBooked = bookedSlots.has(slotKey);
-            
+            const isBlocked = (blockedSlots[dateKey] || []).includes(time);
+            const unavailable = isBooked || isBlocked;
+
             return (
               <button
                 key={time}
-                className={`time-slot ${isBooked ? 'booked' : ''}`}
-                onClick={() => !isBooked && openBookingModal(dateKey, time)}
-                disabled={isBooked}
+                className={`time-slot ${unavailable ? 'booked' : ''}`}
+                onClick={() => !unavailable && openBookingModal(dateKey, time)}
+                disabled={unavailable}
               >
                 {time}
               </button>
@@ -221,23 +254,32 @@ const Calendar = () => {
           <div className="calendar-day-header">Fri</div>
           <div className="calendar-day-header">Sat</div>
           
-          {calendarDays.map((dayData, index) => (
-            <button
-              key={index}
-              className={`calendar-day ${dayData.isOtherMonth ? 'other-month' : ''} ${
-                selectedDate && 
-                selectedDate.getDate() === dayData.day && 
-                selectedDate.getMonth() === currentDate.getMonth() && 
-                selectedDate.getFullYear() === currentDate.getFullYear() 
-                  ? 'selected' 
-                  : ''
-              }`}
-              onClick={() => !dayData.isOtherMonth && selectDate(dayData.day)}
-              disabled={dayData.isOtherMonth}
-            >
-              {dayData.day}
-            </button>
-          ))}
+          {calendarDays.map((dayData, index) => {
+            const dayDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), dayData.day);
+            const dayKey = dayDate.toDateString();
+            const fullyBlocked = !dayData.isOtherMonth && isDayFullyBlocked(dayKey);
+            const isSelected =
+              selectedDate &&
+              selectedDate.getDate() === dayData.day &&
+              selectedDate.getMonth() === currentDate.getMonth() &&
+              selectedDate.getFullYear() === currentDate.getFullYear();
+
+            return (
+              <button
+                key={index}
+                className={[
+                  'calendar-day',
+                  dayData.isOtherMonth ? 'other-month' : '',
+                  isSelected ? 'selected' : '',
+                  fullyBlocked ? 'day-blocked' : '',
+                ].join(' ')}
+                onClick={() => !dayData.isOtherMonth && selectDate(dayData.day)}
+                disabled={dayData.isOtherMonth || fullyBlocked}
+              >
+                {dayData.day}
+              </button>
+            );
+          })}
         </div>
 
         {selectedDate ? showTimeSlots() : (

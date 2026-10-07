@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
 import { getAnalytics } from 'firebase/analytics';
 
 // Firebase configuration
@@ -16,6 +17,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth(app);
 
 // Initialize Analytics only in production
 let analytics = null;
@@ -23,4 +25,4 @@ if (process.env.NODE_ENV === 'production') {
   analytics = getAnalytics(app);
 }
 
-export { db, analytics }; 
+export { db, auth, analytics }; 
