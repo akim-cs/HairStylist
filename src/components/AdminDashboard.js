@@ -3,6 +3,7 @@ import { auth, db } from '../firebase';
 import { GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from 'firebase/auth';
 import { doc, setDoc, collection, onSnapshot } from 'firebase/firestore';
 import TimeSlotSection from './TimeSlotSection';
+import CalendarGrid from './CalendarGrid';
 
 const ADMIN_EMAIL = process.env.REACT_APP_ADMIN_EMAIL;
 
@@ -11,10 +12,6 @@ const TIME_SLOTS = [
   '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM', '6:00 PM'
 ];
 
-const MONTH_NAMES = [
-  'January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December'
-];
 
 const AdminDashboard = () => {
   const [user, setUser] = useState(null);
@@ -102,27 +99,6 @@ const AdminDashboard = () => {
     saveAvailability(key, shouldBlockAll ? [...TIME_SLOTS] : []);
   };
 
-  const buildCalendarDays = () => {
-    const month = currentDate.getMonth();
-    const year = currentDate.getFullYear();
-    const firstDay = new Date(year, month, 1).getDay();
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
-    const daysInPrevMonth = new Date(year, month, 0).getDate();
-    const days = [];
-
-    for (let i = firstDay - 1; i >= 0; i--) {
-      days.push({ day: daysInPrevMonth - i, isOtherMonth: true });
-    }
-    for (let d = 1; d <= daysInMonth; d++) {
-      days.push({ day: d, isOtherMonth: false });
-    }
-    const remaining = 42 - days.length;
-    for (let d = 1; d <= remaining; d++) {
-      days.push({ day: d, isOtherMonth: true });
-    }
-    return days;
-  };
-
   const changeMonth = (dir) => {
     setCurrentDate((prev) => {
       const next = new Date(prev);
@@ -157,7 +133,6 @@ const AdminDashboard = () => {
     );
   }
 
-  const calendarDays = buildCalendarDays();
   const selectedKey = selectedDate ? getDateKey(selectedDate) : null;
   const dayFullyBlocked = selectedKey ? isDayFullyBlocked(selectedKey) : false;
 
@@ -178,49 +153,16 @@ const AdminDashboard = () => {
         </div>
 
         <div className="admin-calendar-wrap">
-          <div className="calendar-header">
-            <button className="calendar-nav" onClick={() => changeMonth(-1)}>← Previous</button>
-            <div className="calendar-month">
-              {MONTH_NAMES[currentDate.getMonth()]} {currentDate.getFullYear()}
-            </div>
-            <button className="calendar-nav" onClick={() => changeMonth(1)}>Next →</button>
-          </div>
-
-          <div className="calendar-grid">
-            {['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map((d) => (
-              <div key={d} className="calendar-day-header">{d}</div>
-            ))}
-            {calendarDays.map((dayData, i) => {
-              if (dayData.isOtherMonth) {
-                return <div key={i} className="calendar-day other-month">{dayData.day}</div>;
-              }
-              const dayDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), dayData.day);
-              const key = getDateKey(dayDate);
-              const fullyBlocked = isDayFullyBlocked(key);
-              const partiallyBlocked = isDayPartiallyBlocked(key);
-              const isSelected =
-                selectedDate &&
-                selectedDate.getDate() === dayData.day &&
-                selectedDate.getMonth() === currentDate.getMonth() &&
-                selectedDate.getFullYear() === currentDate.getFullYear();
-
-              return (
-                <button
-                  key={i}
-                  className={[
-                    'calendar-day',
-                    isSelected ? 'selected' : '',
-                    fullyBlocked ? 'admin-day-blocked' : '',
-                    partiallyBlocked ? 'admin-day-partial' : '',
-                  ].join(' ')}
-                  onClick={() => setSelectedDate(dayDate)}
-                >
-                  {dayData.day}
-                  {partiallyBlocked && <span className="admin-day-dot" />}
-                </button>
-              );
-            })}
-          </div>
+          <CalendarGrid
+            currentDate={currentDate}
+            selectedDate={selectedDate}
+            onSelectDate={setSelectedDate}
+            onChangeMonth={changeMonth}
+            isBlocked={isDayFullyBlocked}
+            isPartial={isDayPartiallyBlocked}
+            disablePast={false}
+            disableBlocked={false}
+          />
 
           <div className="admin-legend">
             <span className="admin-legend-item">

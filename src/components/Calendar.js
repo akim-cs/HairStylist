@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { db } from '../firebase';
 import { collection, addDoc, getDocs, onSnapshot } from 'firebase/firestore';
 import BookingModal from './BookingModal';
+import CalendarGrid from './CalendarGrid';
 import TimeSlotSection from './TimeSlotSection';
 import { sendBookingNotification } from '../services/emailService';
 
-const TIME_SLOTS_ALL = [
+const TIME_SLOTS = [
   '10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM',
   '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM', '6:00 PM'
 ];
@@ -19,132 +20,95 @@ const Calendar = () => {
   const [showModal, setShowModal] = useState(false);
   const [bookingDetails, setBookingDetails] = useState('');
 
-  const timeSlots = TIME_SLOTS_ALL;
-
-  const monthNames = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
-  ];
-
-  // Load booked appointments from Firebase
-  useEffect(() => {
-    const loadBookedAppointments = async () => {
-      try {
-        const appointmentsRef = collection(db, 'appointments');
-        const snapshot = await getDocs(appointmentsRef);
-        
-        const booked = new Set();
-        snapshot.forEach((doc) => {
-          const data = doc.data();
-          const slotKey = `${data.date}-${data.time}`;
-          booked.add(slotKey);
-        });
-        
-        setBookedSlots(booked);
-      } catch (error) {
-        console.error("Error loading appointments:", error);
-      }
-    };
-
-    loadBookedAppointments();
-  }, []);
-
-  // Set up real-time listener for appointments
+  // One-time load then real-time listener for appointments
   useEffect(() => {
     const appointmentsRef = collection(db, 'appointments');
     const unsubscribe = onSnapshot(appointmentsRef, (snapshot) => {
       const booked = new Set();
       snapshot.forEach((doc) => {
         const data = doc.data();
-        const slotKey = `${data.date}-${data.time}`;
-        booked.add(slotKey);
+        booked.add(`${data.date}-${data.time}`);
       });
       setBookedSlots(booked);
     });
-
     return () => unsubscribe();
   }, []);
 
-  // Real-time listener for barber-blocked availability
   useEffect(() => {
-    const availRef = collection(db, 'availability');
-    const unsubscribe = onSnapshot(availRef, (snapshot) => {
+    const unsubscribe = onSnapshot(collection(db, 'availability'), (snapshot) => {
       const blocked = {};
-      snapshot.forEach((doc) => {
-        blocked[doc.id] = doc.data().blockedTimes || [];
-      });
+      snapshot.forEach((doc) => { blocked[doc.id] = doc.data().blockedTimes || []; });
       setBlockedSlots(blocked);
     });
     return () => unsubscribe();
   }, []);
 
-  const renderCalendar = () => {
-    const currentMonth = currentDate.getMonth();
-    const currentYear = currentDate.getFullYear();
-    
-    const firstDay = new Date(currentYear, currentMonth, 1).getDay();
-    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-    const daysInPrevMonth = new Date(currentYear, currentMonth, 0).getDate();
+  const isDayFullyBlocked = (dateKey) =>
+    TIME_SLOTS.every(t => (blockedSlots[dateKey] || []).includes(t));
 
-    const days = [];
-
-    // Add previous month's trailing days
-    for (let i = firstDay - 1; i >= 0; i--) {
-      days.push({
-        day: daysInPrevMonth - i,
-        isOtherMonth: true
-      });
-    }
-
-    // Add current month's days
-    for (let day = 1; day <= daysInMonth; day++) {
-      days.push({
-        day,
-        isOtherMonth: false
-      });
-    }
-
-    // Add next month's leading days
-    const totalCells = days.length;
-    const remainingCells = 42 - totalCells; // 6 rows × 7 days
-    for (let day = 1; day <= remainingCells; day++) {
-      days.push({
-        day,
-        isOtherMonth: true
-      });
-    }
-
-    return days;
+  const changeMonth = (direction) => {
+    setCurrentDate(prev => {
+      const next = new Date(prev);
+      next.setMonth(next.getMonth() + direction);
+      return next;
+    });
+    setSelectedDate(null);
   };
 
-  const selectDate = (day) => {
-    const newSelectedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
-    setSelectedDate(newSelectedDate);
+  const openBookingModal = (dateKey, time) => {
+    setSelectedTime(time);
+    const formattedDate = new Date(dateKey).toLocaleDateString('en-US', {
+      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+    });
+    setBookingDetails(`${formattedDate} at ${time}`);
+    setShowModal(true);
   };
 
-  const isDayFullyBlocked = (dateKey) => {
-    const blocked = blockedSlots[dateKey] || [];
-    return timeSlots.every((t) => blocked.includes(t));
+  const closeBookingModal = () => {
+    setShowModal(false);
+    setSelectedTime(null);
+    setBookingDetails('');
   };
 
-  const showTimeSlots = () => {
+  const handleBookingSubmit = async (formData) => {
+    try {
+      const bookingData = {
+        ...formData,
+        date: selectedDate.toDateString(),
+        time: selectedTime,
+        timestamp: new Date().toISOString(),
+        status: 'confirmed'
+      };
+      const docRef = await addDoc(collection(db, 'appointments'), bookingData);
+      console.log("Appointment booked with ID: ", docRef.id);
+      try {
+        await sendBookingNotification(bookingData);
+        alert('Appointment booked successfully! Andy has been notified and will contact you shortly.');
+      } catch (emailError) {
+        console.error("Email notification failed:", emailError);
+        alert('Appointment booked successfully! However, there was an issue sending the notification email. Please contact Andy directly.');
+      }
+      closeBookingModal();
+    } catch (error) {
+      console.error("Error booking appointment:", error);
+      alert('Sorry, there was an error booking your appointment. Please try again.');
+    }
+  };
+
+  const renderTimeSlots = () => {
     if (!selectedDate) return null;
-
     const dateKey = selectedDate.toDateString();
 
     if (isDayFullyBlocked(dateKey)) {
       return (
         <div className="booking-info">
-          <p style={{ color: 'var(--muted)', fontStyle: 'italic' }}>
-            No availability on this date.
-          </p>
+          <p style={{ color: 'var(--muted)', fontStyle: 'italic' }}>No availability on this date.</p>
         </div>
       );
     }
 
-    const slots = timeSlots.map(time => {
-      const slotKey = `${dateKey}-${time}`;
-      const unavailable = bookedSlots.has(slotKey) || (blockedSlots[dateKey] || []).includes(time);
+    const slots = TIME_SLOTS.map(time => {
+      const unavailable = bookedSlots.has(`${dateKey}-${time}`) || (blockedSlots[dateKey] || []).includes(time);
       return { time, faded: unavailable, disabled: unavailable };
     });
 
@@ -157,122 +121,23 @@ const Calendar = () => {
     );
   };
 
-  const openBookingModal = (date, time) => {
-    setSelectedTime(time);
-    const formattedDate = new Date(date).toLocaleDateString('en-US', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-    setBookingDetails(`${formattedDate} at ${time}`);
-    setShowModal(true);
-  };
-
-  const closeBookingModal = () => {
-    setShowModal(false);
-    setSelectedTime(null);
-    setBookingDetails('');
-  };
-
-  const changeMonth = (direction) => {
-    setCurrentDate(prevDate => {
-      const newDate = new Date(prevDate);
-      newDate.setMonth(newDate.getMonth() + direction);
-      return newDate;
-    });
-    setSelectedDate(null);
-  };
-
-  const handleBookingSubmit = async (formData) => {
-    try {
-      const bookingData = {
-        ...formData,
-        date: selectedDate.toDateString(),
-        time: selectedTime,
-        timestamp: new Date().toISOString(),
-        status: 'confirmed'
-      };
-
-      // Save to Firebase
-      const docRef = await addDoc(collection(db, 'appointments'), bookingData);
-      console.log("Appointment booked with ID: ", docRef.id);
-      
-      // Send email notification via EmailJS
-      try {
-        await sendBookingNotification(bookingData);
-        alert('Appointment booked successfully! Andy has been notified and will contact you shortly.');
-      } catch (emailError) {
-        console.error("Email notification failed:", emailError);
-        alert('Appointment booked successfully! However, there was an issue sending the notification email. Please contact Andy directly.');
-      }
-      
-      closeBookingModal();
-      
-    } catch (error) {
-      console.error("Error booking appointment:", error);
-      alert('Sorry, there was an error booking your appointment. Please try again.');
-    }
-  };
-
-  const calendarDays = renderCalendar();
-
   return (
     <>
       <section className="calendar-section" id="booking">
         <h2 className="section-title">Book an Appointment</h2>
         <p className="section-subtitle">Select a date & time</p>
 
-        <div className="calendar-header">
-          <button className="calendar-nav" onClick={() => changeMonth(-1)}>
-            ← Previous
-          </button>
-          <div className="calendar-month">
-            {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
-          </div>
-          <button className="calendar-nav" onClick={() => changeMonth(1)}>
-            Next →
-          </button>
-        </div>
+        <CalendarGrid
+          currentDate={currentDate}
+          selectedDate={selectedDate}
+          onSelectDate={setSelectedDate}
+          onChangeMonth={changeMonth}
+          isBlocked={isDayFullyBlocked}
+          disablePast={true}
+          disableBlocked={true}
+        />
 
-        <div className="calendar-grid">
-          <div className="calendar-day-header">Sun</div>
-          <div className="calendar-day-header">Mon</div>
-          <div className="calendar-day-header">Tue</div>
-          <div className="calendar-day-header">Wed</div>
-          <div className="calendar-day-header">Thu</div>
-          <div className="calendar-day-header">Fri</div>
-          <div className="calendar-day-header">Sat</div>
-          
-          {calendarDays.map((dayData, index) => {
-            const dayDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), dayData.day);
-            const dayKey = dayDate.toDateString();
-            const fullyBlocked = !dayData.isOtherMonth && isDayFullyBlocked(dayKey);
-            const isSelected =
-              selectedDate &&
-              selectedDate.getDate() === dayData.day &&
-              selectedDate.getMonth() === currentDate.getMonth() &&
-              selectedDate.getFullYear() === currentDate.getFullYear();
-
-            return (
-              <button
-                key={index}
-                className={[
-                  'calendar-day',
-                  dayData.isOtherMonth ? 'other-month' : '',
-                  isSelected ? 'selected' : '',
-                  fullyBlocked ? 'day-blocked' : '',
-                ].join(' ')}
-                onClick={() => !dayData.isOtherMonth && selectDate(dayData.day)}
-                disabled={dayData.isOtherMonth || fullyBlocked}
-              >
-                {dayData.day}
-              </button>
-            );
-          })}
-        </div>
-
-        {selectedDate ? showTimeSlots() : (
+        {selectedDate ? renderTimeSlots() : (
           <div className="booking-info">
             <p>Select a date to view available time slots</p>
           </div>
@@ -289,4 +154,4 @@ const Calendar = () => {
   );
 };
 
-export default Calendar; 
+export default Calendar;

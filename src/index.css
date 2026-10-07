@@ -279,7 +279,7 @@ body {
 }
 
 .calendar-day.other-month {
-  color: var(--border);
+  color: var(--muted);
   background: var(--cream);
 }
 
@@ -504,11 +504,28 @@ body {
   color: var(--muted);
 }
 
-/* ── Client calendar: blocked day ───────────── */
+/* ── Calendar: past day (always muted, selected state never applies) ── */
+.calendar-day.day-past {
+  color: var(--muted);
+  background: var(--cream);
+}
+
+.calendar-day.day-past:not(:disabled):hover {
+  background: var(--border);
+  color: var(--text);
+}
+
+/* ── Calendar: admin-blocked day (muted, selected can override) ── */
 .calendar-day.day-blocked {
-  color: var(--border);
+  color: var(--muted);
   background: var(--cream);
   cursor: not-allowed;
+}
+
+/* Selected wins over blocked (but not over past — past never gets selected class) */
+.calendar-day.selected.day-blocked {
+  background: var(--text);
+  color: var(--white);
 }
 
 /* ── Admin page ─────────────────────────────── */
@@ -675,24 +692,22 @@ body {
   margin-bottom: 40px;
 }
 
-/* Admin calendar: blocked / partial day indicators */
-.calendar-day.admin-day-blocked {
-  background: var(--cream);
-  color: var(--muted);
-  cursor: pointer;
+.admin-calendar-wrap .calendar-day:not(:disabled):hover {
+  background: var(--text);
+  color: var(--white);
 }
 
-.calendar-day.admin-day-blocked:hover {
+/* Calendar: blocked day (client = disabled, admin = clickable to toggle) */
+.calendar-day.day-blocked:not(:disabled):hover {
   background: var(--border);
   color: var(--text);
-  text-decoration: none;
 }
 
-.calendar-day.admin-day-partial {
+.calendar-day.day-partial {
   position: relative;
 }
 
-.admin-day-dot {
+.day-dot {
   position: absolute;
   bottom: 4px;
   left: 50%;
