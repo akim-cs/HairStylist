@@ -19,7 +19,8 @@ A React-based website for Andy Kim, a professional hairstylist, featuring a port
 - **Database**: Firebase Firestore
 - **Auth**: Firebase Authentication (Google OAuth, admin-only)
 - **Email**: EmailJS
-- **Deployment**: Vercel
+- **Deployment**: Vercel (production: `main`, staging: `develop`)
+- **CI/CD**: GitHub Actions — lint, test, and build run on every push and pull request
 
 ## Environment Variables
 
@@ -41,25 +42,47 @@ npm install
 npm start
 ```
 
+## Testing
+
+```bash
+npm test
+```
+
+Runs the Jest + React Testing Library suite. Tests cover `Header` and `BookingModal` components.
+
+## CI/CD Pipeline
+
+GitHub Actions runs on every push and pull request to `main` and `develop`:
+
+1. Install dependencies (`npm ci`)
+2. Lint (`eslint`)
+3. Test (`npm test`)
+4. Build (`npm run build`)
+
+Merging to `main` triggers a Vercel production deploy. Pushing to `develop` triggers a Vercel staging preview deploy.
+
 ## Project Structure
 
 ```
 src/
 ├── components/
-│   ├── Header.js           # Stylist name, bio, and pricing
-│   ├── Portfolio.js        # Portfolio image grid
-│   ├── Calendar.js         # Client booking calendar
-│   ├── AdminDashboard.js   # Admin availability manager
-│   ├── CalendarGrid.js     # Shared calendar grid component
-│   ├── TimeSlotSection.js  # Shared time slot section component
-│   ├── TimeSlotGrid.js     # Shared time slot pill grid
-│   └── BookingModal.js     # Appointment booking form
+│   ├── Header.js               # Stylist name, bio, and pricing
+│   ├── Header.test.js          # Header component tests
+│   ├── Portfolio.js            # Portfolio image grid
+│   ├── Calendar.js             # Client booking calendar
+│   ├── AdminDashboard.js       # Admin availability manager
+│   ├── CalendarGrid.js         # Shared calendar grid component
+│   ├── TimeSlotSection.js      # Shared time slot section component
+│   ├── TimeSlotGrid.js         # Shared time slot pill grid
+│   ├── BookingModal.js         # Appointment booking form
+│   └── BookingModal.test.js    # BookingModal component tests
 ├── services/
-│   └── emailService.js     # EmailJS notification on booking
-├── firebase.js             # Firebase configuration
-├── App.js                  # Main application component
-├── index.js                # React entry point
-└── index.css               # Global styles
+│   └── emailService.js         # EmailJS notification on booking
+├── firebase.js                 # Firebase configuration
+├── setupTests.js               # Jest + Testing Library setup
+├── App.js                      # Main application component
+├── index.js                    # React entry point
+└── index.css                   # Global styles
 
 public/
 ├── images/                 # Portfolio images
