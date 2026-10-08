@@ -1,5 +1,7 @@
 # Andy Kim - Hairstylist Website
 
+[![CI](https://github.com/akim-cs/HairStylist/actions/workflows/ci.yml/badge.svg)](https://github.com/akim-cs/HairStylist/actions/workflows/ci.yml)
+
 A React-based website for Andy Kim, a professional hairstylist, featuring a portfolio showcase and appointment booking system.
 
 ## Features
