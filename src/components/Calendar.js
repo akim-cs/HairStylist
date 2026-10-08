@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../firebase';
-import { collection, addDoc, getDocs, onSnapshot } from 'firebase/firestore';
+import { collection, addDoc, onSnapshot } from 'firebase/firestore';
 import BookingModal from './BookingModal';
 import CalendarGrid from './CalendarGrid';
 import TimeSlotSection from './TimeSlotSection';
